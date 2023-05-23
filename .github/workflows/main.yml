@@ -40,8 +40,7 @@ jobs:
 
       - name: Generate release tag
         id: tag
-        run: |
-          echo "::set-output name=release_tag::$(date + "%Y.%m.%d_%H-%M")"
+        run: echo "release_tag=$(date "+%Y.%m.%d_%H-%M") >> $GITHUB_OUTPUT"
 
       - name: Rename the .apk to the tag version
         run: mv ./android/app/build/outputs/apk/release/app-release.apk ./android/app/build/outputs/apk/release/miaufeeder_${{ steps.tag.outputs.release_tag }}.apk
@@ -49,6 +48,8 @@ jobs:
       # Creating and Uploading the releases
       - name: Create Release and Uploading Files
         uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ steps.tag.outputs.release_tag }}
           files: android/app/build/outputs/apk/release/miaufeeder_${{ steps.tag.outputs.release_tag }}.apk
