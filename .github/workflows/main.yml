@@ -1,30 +1,33 @@
-name: Build Android .apk
+name: Build Android .apk and create a release
 
-run-name: "Building the .apk with the tag triggered by @${{ github.actor }}"
+run-name: 'Building the .apk'
 
 permissions:
   contents: write
-  
+
 on:
   push:
     branches: [main]
 
-jobs: 
+jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+
       - name: Install Java
         uses: actions/setup-java@v3
         with:
-          java-version: "11"
-          distribution: "adopt"
-          cache: "gradle"
+          java-version: '11'
+          distribution: 'adopt'
+          cache: 'gradle'
+
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@v1
-      - name: Setup Node  
+
+      - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: '16'
@@ -35,18 +38,16 @@ jobs:
       - name: Build application
         run: yarn release
 
-      - name: List the .apks compiled
-        run: ls ./android/app/build/outputs/apk/release/ -hal
+      - name: Generate release tag
+        run: |
+          echo "::set-output name=release_tag::$(date + "%Y.%m.%d_%H-%M")"
 
       - name: Rename the .apk to the tag version
-        run: mv ./android/app/build/outputs/apk/release/app-universal-release.apk ./android/app/build/outputs/apk/release/app_name_${{ github.ref_name }}.apk
-
+        run: mv ./android/app/build/outputs/apk/release/app-release.apk ./android/app/build/outputs/apk/release/miaufeeder_${{ steps.tag.outputs.release_tag }}.apk
 
       # Creating and Uploading the releases
       - name: Create Release and Uploading Files
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: |
-            android/app/build/outputs/apk/release/app-arm64-v8a-release.apk
-    
+          tag_name: ${{ steps.tag.outputs.release_tag }}
+          files: android/app/build/outputs/apk/release/miaufeeder_${{ steps.tag.outputs.release_tag }}.apk
