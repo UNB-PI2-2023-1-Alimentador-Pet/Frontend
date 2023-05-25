@@ -30,23 +30,22 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: '18'
 
-      - name: Run Yarn Install
+      - name: Run Yarn install
         run: yarn install
 
       - name: Build application
         run: yarn release
 
-      - name: Generate release tag
+      - name: Generate Release tag
         id: tag
         run: echo "::set-output name=release_tag::$(date "+%Y.%m.%d_%H-%M")"
 
       - name: Rename the .apk to the tag version
         run: mv ./android/app/build/outputs/apk/release/app-release.apk ./android/app/build/outputs/apk/release/miaufeeder_${{ steps.tag.outputs.release_tag }}.apk
 
-      # Creating and Uploading the releases
-      - name: Create Release and Uploading Files
+      - name: Create Release and upload file
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ steps.tag.outputs.release_tag }}
