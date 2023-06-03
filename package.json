@@ -39,6 +39,7 @@
     "metro-react-native-babel-preset": "0.73.9",
     "postcss": "^8.4.23",
     "prettier": "^2.4.1",
+    "react-native-dotenv": "^3.4.8",
     "react-test-renderer": "18.2.0"
   },
   "jest": {

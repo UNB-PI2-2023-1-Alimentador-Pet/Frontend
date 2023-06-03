@@ -1,10 +1,10 @@
 import api from './api';
 
-export const getUser = async (id, token) => {
+export const getUser = async (hash, token) => {
   let response = {};
 
   try {
-    response = await api.get(`/users/${id}`, {
+    response = await api.get(`/users/${hash}`, {
       headers: {
         Authorization: token,
       },
@@ -20,7 +20,7 @@ export const authUser = async data => {
   let response = {};
 
   try {
-    response = await api.post('/user/login', data);
+    response = await api.post('/users/login', data);
   } catch (err) {
     console.log(err);
   }
@@ -32,7 +32,7 @@ export const createUser = async data => {
   let response = {};
 
   try {
-    response = await api.post('/user/signup', data);
+    response = await api.post('/users/signup', data);
   } catch (err) {
     console.log(err);
   }
@@ -40,11 +40,20 @@ export const createUser = async data => {
   return response;
 };
 
-export const updateUser = async (data, id, token) => {
-  const response = await api.patch(`/users/${id}`, data, {
-    headers: {
-      Authorization: token,
-    },
-  });
+export const updateUser = async (data, hash, token) => {
+  let response = {};
+
+  console.log('url', process.env.API_URL);
+
+  try {
+    response = await api.put(`/users/edit/${hash}`, data, {
+      headers: {
+        Authorization: token,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+
   return response;
 };

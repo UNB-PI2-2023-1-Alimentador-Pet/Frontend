@@ -1,8 +1,9 @@
 import axios from 'axios';
 
-axios.defaults.baseURL = process.env.API_URL;
+import {API_URL} from '@env';
+
+axios.defaults.baseURL = API_URL;
 axios.defaults.timeout = 60 * 1000;
-axios.defaults.headers.common.Accept = 'application/json';
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 
 axios.interceptors.response.use(
