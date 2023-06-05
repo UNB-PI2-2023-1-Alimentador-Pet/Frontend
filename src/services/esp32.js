@@ -1,16 +1,16 @@
 import axios from 'axios';
 
-import {API_URL} from '@env';
+import {ESP32_API_URL} from '@env';
 
-const api = axios.create({
-  baseURL: API_URL,
-  timeout: 30000,
+const esp32 = axios.create({
+  baseURL: ESP32_API_URL,
+  timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-api.interceptors.response.use(
+esp32.interceptors.response.use(
   response => response,
   error => {
     if (error.response) {
@@ -23,4 +23,4 @@ api.interceptors.response.use(
   },
 );
 
-export default api;
+export default esp32;

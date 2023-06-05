@@ -43,8 +43,6 @@ export const createUser = async data => {
 export const updateUser = async (data, hash, token) => {
   let response = {};
 
-  console.log('url', process.env.API_URL);
-
   try {
     response = await api.put(`/users/edit/${hash}`, data, {
       headers: {
