@@ -18,7 +18,7 @@ export const SubTitle = styled.Text`
 `;
 
 export const InputText = styled.TextInput.attrs({
-  placeholderTextColor: colorsLight.gray,
+  placeholderTextColor: colorsLight.darkGray,
   autoCapitalize: 'none',
   multiline: false,
 })`
@@ -35,11 +35,18 @@ export const InputText = styled.TextInput.attrs({
 
 export const ScrollViewStyled = styled.ScrollView.attrs({
   contentContainerStyle: {
-    backgroundColor: colorsLight.light,
     // padding: scale(24),
     flexGrow: 1,
   },
 })``;
+
+export const SubTitleSecondary = styled.Text`
+  font-family: 'Inter-SemiBold';
+  font-size: ${scale(14)}px;
+  color: ${colorsLight.dark};
+  margin-bottom: ${scale(24)}px;
+  text-align: center;
+`;
 
 export const Item = styled.View`
   width: 100%;
@@ -54,4 +61,26 @@ export const ItemTitle = styled.Text`
   font-family: 'Inter-SemiBold';
   color: ${colorsLight.dark};
   margin-bottom: ${scale(10)}px;
+`;
+
+export const Tooltip = styled.View`
+  padding: ${scale(20)}px;
+  margin-bottom: ${scale(18)}px;
+  flex-direction: row;
+`;
+
+export const TooltipIconWrapper = styled.View`
+  align-items: center;
+  justify-content: center;
+  margin-right: ${scale(14)}px;
+`;
+
+export const TooltipTextWrapper = styled.View`
+  flex: 1;
+`;
+
+export const TooltipText = styled.Text`
+  font-family: 'Inter-Medium';
+  font-size: ${scale(12)}px;
+  color: ${colorsLight.darkGray};
 `;
