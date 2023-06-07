@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unstable-nested-components */
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {House, UserCircle} from 'phosphor-react-native';
+import {HouseLine, UserCircle} from 'phosphor-react-native';
 
 import Home from '../screens/app/Home';
 import Profile from '../screens/app/Profile';
@@ -17,7 +17,7 @@ const TabBar = () => {
       screenOptions={({route}) => ({
         tabBarIcon: ({color}) => {
           if (route.name === 'Home') {
-            return <House color={color} weight="regular" size={scale(26)} />;
+            return <HouseLine color={color} weight="fill" size={scale(26)} />;
           } else if (route.name === 'Profile') {
             return (
               <UserCircle color={color} weight="regular" size={scale(26)} />
@@ -33,8 +33,12 @@ const TabBar = () => {
         headerShown: false,
       })}
       initialRouteName="Home">
-      <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Profile" component={Profile} />
+      <Tab.Screen name="Home" component={Home} options={{title: 'Home'}} />
+      <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{title: 'Perfil'}}
+      />
     </Tab.Navigator>
   );
 };

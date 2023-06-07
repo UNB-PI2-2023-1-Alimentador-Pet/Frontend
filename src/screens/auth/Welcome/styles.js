@@ -12,12 +12,12 @@ export const Container = styled.View`
 `;
 
 export const ContainerLogo = styled.View`
+  flex: 1;
   width: 100%;
 `;
 
 export const Logo = styled.Image`
   height: ${scale(100)}px;
-  width: ${scale(300)}px;
+  resize-mode: contain;
   margin-bottom: ${scale(20)}px;
-  background-color: ${colorsLight.mediumGray};
 `;

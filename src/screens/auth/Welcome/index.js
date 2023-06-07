@@ -10,17 +10,15 @@ const Welcome = ({navigation}) => {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colorsLight.light}}>
       <Container>
-        <ContainerLogo>
-          <Logo source={require('../../../assets/imgs/miaufeeder-logo.png')} />
+        <Logo source={require('../../../assets/imgs/miaufeeder-logo.png')} />
 
-          <ButtonPrimary onPress={() => navigation.navigate('Login')}>
-            <ButtonText>Entrar</ButtonText>
-          </ButtonPrimary>
+        <ButtonPrimary onPress={() => navigation.navigate('Login')}>
+          <ButtonText>Entrar</ButtonText>
+        </ButtonPrimary>
 
-          <ButtonPrimary onPress={() => navigation.navigate('Register')}>
-            <ButtonText>Criar conta</ButtonText>
-          </ButtonPrimary>
-        </ContainerLogo>
+        <ButtonPrimary onPress={() => navigation.navigate('Register')}>
+          <ButtonText>Criar conta</ButtonText>
+        </ButtonPrimary>
       </Container>
     </SafeAreaView>
   );

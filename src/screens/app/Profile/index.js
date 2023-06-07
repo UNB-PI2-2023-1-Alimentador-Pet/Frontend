@@ -5,6 +5,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {Container} from './styles';
 import {ScrollViewStyled, InputText} from '../../../components/Defaults';
 import {ButtonPrimary, ButtonText} from '../../../components/ButtonPrimary';
+import {colorsLight} from '../../../utils/colors';
 
 import {useUser} from '../../../hooks/user';
 import {updateUser} from '../../../services/user';
@@ -34,7 +35,7 @@ const Profile = () => {
     const response = await updateUser(newUser, user.userHash, token);
 
     if (response.status === 200) {
-      storeUser({...user, newUser});
+      storeUser(response.data);
     } else if (response.status === 401) {
       Alert.alert('Seu token expirou, faça login novamente');
     } else {
@@ -43,7 +44,7 @@ const Profile = () => {
   };
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: colorsLight.lightGray}}>
       <Container>
         <ScrollViewStyled>
           <InputText
