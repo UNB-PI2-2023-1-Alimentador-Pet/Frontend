@@ -6,6 +6,8 @@ import Login from '../screens/auth/Login';
 import LostPassword from '../screens/auth/LostPassword';
 import Register from '../screens/auth/Register';
 
+import {colors} from '../utils/colors';
+
 const Stack = createNativeStackNavigator();
 
 const AuthStack = () => {
@@ -13,8 +15,11 @@ const AuthStack = () => {
     <Stack.Navigator
       initialRouteName="Welcome"
       screenOptions={{
+        headerBackTitle: '',
         headerBackTitleVisible: false,
-        //headerTransparent: true,
+        headerTintColor: colors.dark,
+        headerShadowVisible: false,
+        headerTitle: '',
       }}>
       <Stack.Screen
         name="Welcome"

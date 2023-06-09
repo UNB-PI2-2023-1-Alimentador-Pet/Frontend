@@ -6,7 +6,7 @@ import {HouseLine, UserCircle} from 'phosphor-react-native';
 import Home from '../screens/app/Home';
 import Profile from '../screens/app/Profile';
 
-import {colorsLight} from '../utils/colors';
+import {colors} from '../utils/colors';
 import {scale} from '../utils/scalling';
 
 const Tab = createBottomTabNavigator();
@@ -28,8 +28,8 @@ const TabBar = () => {
           fontFamily: 'Inter-Semibold',
           fontSize: scale(10),
         },
-        tabBarActiveTintColor: colorsLight.primary,
-        tabBarInactiveTintColor: colorsLight.darkGray,
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.darkGray,
         headerShown: false,
       })}
       initialRouteName="Home">

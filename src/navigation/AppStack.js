@@ -5,11 +5,26 @@ import TabBar from './TabBar';
 import AddDevice from '../screens/app/AddDevice';
 import SendData from '../screens/app/SendData';
 
+import {colors} from '../utils/colors';
+import {scale} from '../utils/scalling';
+
 const Stack = createNativeStackNavigator();
 
 const AppStack = () => {
   return (
-    <Stack.Navigator initialRouteName="HomeTabBar">
+    <Stack.Navigator
+      initialRouteName="HomeTabBar"
+      screenOptions={{
+        headerBackTitle: '',
+        headerBackTitleVisible: false,
+        headerTintColor: colors.dark,
+        headerShadowVisible: false,
+        headerTitleStyle: {
+          fontFamily: 'Inter-SemiBold',
+          fontSize: scale(15),
+        },
+        headerTitleAlign: 'center',
+      }}>
       <Stack.Screen
         name="HomeTabBar"
         component={TabBar}
