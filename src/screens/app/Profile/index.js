@@ -2,10 +2,15 @@ import React, {useRef, useState} from 'react';
 import {Alert, Keyboard} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-import {Container} from './styles';
-import {ScrollViewStyled, InputText} from '../../../components/Defaults';
-import {ButtonPrimary, ButtonText} from '../../../components/ButtonPrimary';
-import {colorsLight} from '../../../utils/colors';
+import {ScreenContainer} from './styles';
+import {ScrollArea} from '../../../components/Defaults';
+import {InputPrimary} from '../../../components/Inputs';
+import {
+  ButtonPrimary,
+  ButtonSecondary,
+  ButtonText,
+} from '../../../components/Buttons';
+import {colors} from '../../../utils/colors';
 
 import {useUser} from '../../../hooks/user';
 import {updateUser} from '../../../services/user';
@@ -44,10 +49,10 @@ const Profile = () => {
   };
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: colorsLight.lightGray}}>
-      <Container>
-        <ScrollViewStyled>
-          <InputText
+    <SafeAreaView style={{flex: 1, backgroundColor: colors.lightGray}}>
+      <ScreenContainer>
+        <ScrollArea>
+          <InputPrimary
             ref={nomeInput}
             placeholder="Nome"
             maxLength={100}
@@ -55,8 +60,9 @@ const Profile = () => {
             onChangeText={text => setNome(text)}
             onSubmitEditing={() => emailInput.current?.focus()}
             returnKeyType="next"
+            light
           />
-          <InputText
+          <InputPrimary
             ref={emailInput}
             placeholder="E-mail"
             keyboardType="email-address"
@@ -65,8 +71,9 @@ const Profile = () => {
             onChangeText={text => setEmail(text)}
             onSubmitEditing={() => senhaInput.current?.focus()}
             returnKeyType="next"
+            light
           />
-          <InputText
+          <InputPrimary
             ref={senhaInput}
             placeholder="Nova Senha"
             secureTextEntry
@@ -74,17 +81,18 @@ const Profile = () => {
             value={senha}
             onChangeText={text => setSenha(text)}
             returnKeyType="done"
+            light
           />
 
           <ButtonPrimary onPress={() => handleEdit()}>
             <ButtonText>Salvar</ButtonText>
           </ButtonPrimary>
 
-          <ButtonPrimary onPress={() => signOut(false)}>
+          <ButtonSecondary onPress={() => signOut()}>
             <ButtonText>Sair</ButtonText>
-          </ButtonPrimary>
-        </ScrollViewStyled>
-      </Container>
+          </ButtonSecondary>
+        </ScrollArea>
+      </ScreenContainer>
     </SafeAreaView>
   );
 };

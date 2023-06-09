@@ -3,9 +3,9 @@ import {PermissionsAndroid, TouchableOpacity} from 'react-native';
 import {CircleNotch, WifiHigh} from 'phosphor-react-native';
 import WifiManager from 'react-native-wifi-reborn';
 
-import {Container, Content} from './styles';
+import {ScreenContainer, Content} from './styles';
 import {
-  ScrollViewStyled,
+  ScrollArea,
   Item,
   ItemTitle,
   Tooltip,
@@ -15,7 +15,7 @@ import {
   SubTitleSecondary,
 } from '../../../components/Defaults';
 import Spinner from '../../../components/Spinner';
-import {colorsLight} from '../../../utils/colors';
+import {colors} from '../../../utils/colors';
 import {scale, percentage} from '../../../utils/scalling';
 
 const AddDevice = ({navigation}) => {
@@ -85,15 +85,15 @@ const AddDevice = ({navigation}) => {
   }, [getWifiList, wifiEnabled]);
 
   return (
-    <Container>
-      <ScrollViewStyled>
+    <ScreenContainer>
+      <ScrollArea>
         {wifiEnabled ? (
           <TouchableOpacity onPress={() => getWifiList()}>
             <Tooltip>
               <TooltipIconWrapper>
                 <Spinner>
                   <CircleNotch
-                    color={colorsLight.primarycolor}
+                    color={colors.primary}
                     weight="fill"
                     size={scale(24)}
                   />
@@ -112,7 +112,7 @@ const AddDevice = ({navigation}) => {
           <Tooltip>
             <TooltipIconWrapper>
               <WifiHigh
-                color={colorsLight.primarycolor}
+                color={colors.primary}
                 weight="regular"
                 size={scale(28)}
               />
@@ -136,8 +136,8 @@ const AddDevice = ({navigation}) => {
             </TouchableOpacity>
           ))}
         </Content>
-      </ScrollViewStyled>
-    </Container>
+      </ScrollArea>
+    </ScreenContainer>
   );
 };
 

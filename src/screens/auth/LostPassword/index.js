@@ -1,17 +1,25 @@
 import React, {useRef, useState} from 'react';
 import SwiperFlatList from 'react-native-swiper-flatlist';
 
-import {Container, ScreenView} from './styles';
+import LoadingModal from '../../../components/LoadingModal';
 import {
-  ScrollViewStyled,
-  InputText,
+  ScreenContainer,
+  ScrollArea,
+  ContentContainer,
   Title,
-  SubTitle,
+  StepText,
+  SwiperContainer,
 } from '../../../components/Defaults';
-import {ButtonPrimary, ButtonText} from '../../../components/ButtonPrimary';
+import {InputPrimary} from '../../../components/Inputs';
+import {
+  ButtonWrapper,
+  ButtonPrimary,
+  ButtonText,
+} from '../../../components/Buttons';
 
 const LostPassword = () => {
   const [swiperIndex, setSwiperIndex] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const swiper = useRef();
 
@@ -27,28 +35,32 @@ const LostPassword = () => {
   };
 
   return (
-    <Container>
-      <ScrollViewStyled>
-        <Title>Esqueci a senha</Title>
+    <ScreenContainer>
+      <ScrollArea>
+        <ContentContainer>
+          <Title>Esqueci a senha</Title>
 
-        <SubTitle>Parte {swiperIndex + 1}/3</SubTitle>
+          <StepText>Parte {swiperIndex + 1}/3</StepText>
+        </ContentContainer>
 
-        <SwiperFlatList showPagination={false} ref={swiper}>
-          <ScreenView>
-            <InputText
+        <SwiperFlatList ref={swiper} showPagination={false} disableGesture>
+          <SwiperContainer>
+            <InputPrimary
               placeholder="E-mail"
               keyboardType="email-address"
               maxLength={100}
               returnKeyType="next"
             />
 
-            <ButtonPrimary onPress={() => goToNextScreen()}>
-              <ButtonText>Obter código de verificação</ButtonText>
-            </ButtonPrimary>
-          </ScreenView>
+            <ButtonWrapper>
+              <ButtonPrimary onPress={() => goToNextScreen()}>
+                <ButtonText>Obter código de verificação</ButtonText>
+              </ButtonPrimary>
+            </ButtonWrapper>
+          </SwiperContainer>
 
-          <ScreenView>
-            <InputText
+          <SwiperContainer>
+            <InputPrimary
               placeholder="Código de verificação"
               autoCorrect={false}
               maxLength={100}
@@ -56,32 +68,38 @@ const LostPassword = () => {
               returnKeyType="next"
             />
 
-            <ButtonPrimary onPress={() => goToNextScreen()}>
-              <ButtonText>Confirmar</ButtonText>
-            </ButtonPrimary>
-          </ScreenView>
+            <ButtonWrapper>
+              <ButtonPrimary onPress={() => goToNextScreen()}>
+                <ButtonText>Confirmar</ButtonText>
+              </ButtonPrimary>
+            </ButtonWrapper>
+          </SwiperContainer>
 
-          <ScreenView>
-            <InputText
+          <SwiperContainer>
+            <InputPrimary
               placeholder="Nova senha"
               maxLength={100}
               secureTextEntry
               returnKeyType="next"
             />
-            <InputText
+            <InputPrimary
               placeholder="Confirme a nova senha"
               maxLength={100}
               secureTextEntry
               returnKeyType="done"
             />
 
-            <ButtonPrimary onPress={() => goToNextScreen()}>
-              <ButtonText>Alterar senha</ButtonText>
-            </ButtonPrimary>
-          </ScreenView>
+            <ButtonWrapper>
+              <ButtonPrimary onPress={() => goToNextScreen()}>
+                <ButtonText>Alterar senha</ButtonText>
+              </ButtonPrimary>
+            </ButtonWrapper>
+          </SwiperContainer>
         </SwiperFlatList>
-      </ScrollViewStyled>
-    </Container>
+      </ScrollArea>
+
+      <LoadingModal visible={isLoading} />
+    </ScreenContainer>
   );
 };
 

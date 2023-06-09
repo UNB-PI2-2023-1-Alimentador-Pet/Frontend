@@ -1,12 +1,12 @@
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
+import {StatusBar, TouchableOpacity} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {UserCircle, PlusCircle} from 'phosphor-react-native';
 
-import {Container, Header, Content, HomeTitle} from './styles';
-import {Item} from '../../../components/Defaults';
-import {colorsLight} from '../../../utils/colors';
-import {scale, percentage} from '../../../utils/scalling';
+import Item from '../../../components/Item';
+import {ScreenContainer, Header, Content, HomeTitle} from './styles';
+import {colors} from '../../../utils/colors';
+import {scale} from '../../../utils/scalling';
 
 import {useUser} from '../../../hooks/user';
 
@@ -14,24 +14,17 @@ const Home = ({navigation}) => {
   const {devices} = useUser();
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: colorsLight.lightGray}}>
-      <Container>
+    <SafeAreaView style={{flex: 1, backgroundColor: colors.lightGray}}>
+      <StatusBar backgroundColor={colors.lightGray} barStyle="dark-content" />
+      <ScreenContainer>
         <Header>
           <TouchableOpacity
             onPress={() => navigation.navigate('SendData', {ssid: 'Wifi'})}>
-            <UserCircle
-              color={colorsLight.primarycolor}
-              weight="fill"
-              size={scale(28)}
-            />
+            <UserCircle color={colors.primary} weight="fill" size={scale(30)} />
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => navigation.navigate('AddDevice')}>
-            <PlusCircle
-              color={colorsLight.primarycolor}
-              weight="fill"
-              size={scale(28)}
-            />
+            <PlusCircle color={colors.primary} weight="fill" size={scale(30)} />
           </TouchableOpacity>
         </Header>
 
@@ -39,17 +32,19 @@ const Home = ({navigation}) => {
           <HomeTitle>Todos os dispositivos</HomeTitle>
 
           {devices.length === 0 && (
-            <Item>
-              <HomeTitle>Nenhum dispositivo adicionado</HomeTitle>
-            </Item>
+            <Item title={'Nenhum dispositivo adicionado'} />
           )}
+
           {devices.map(device => (
-            <Item key={device.id}>
-              <HomeTitle>{device.nome}</HomeTitle>
-            </Item>
+            <Item
+              key={device.id}
+              image={require('../../../assets/imgs/alimentador.png')}
+              title={device.nome}
+              onPress={() => console.log('Tela do alimentador')}
+            />
           ))}
         </Content>
-      </Container>
+      </ScreenContainer>
     </SafeAreaView>
   );
 };

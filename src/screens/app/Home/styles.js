@@ -1,20 +1,20 @@
 import styled from 'styled-components/native';
 
-import {colorsLight} from '../../../utils/colors';
+import {colors} from '../../../utils/colors';
 import {scale, percentage} from '../../../utils/scalling';
 
-export const Container = styled.View`
+export const ScreenContainer = styled.View`
   flex: 1;
-  background-color: ${colorsLight.lightGray};
-  padding: ${scale(20)}px;
+  background-color: ${colors.lightGray};
+  padding-vertical: ${scale(8)}px;
+  padding-horizontal: ${scale(14)}px;
 `;
 
 export const Header = styled.View`
   width: 100%;
-  background-color: ${colorsLight.primary};
   flex-direction: row;
   justify-content: space-between;
-  margin-bottom: ${scale(10)}px;
+  margin-bottom: ${scale(20)}px;
 `;
 
 export const Content = styled.View`
@@ -24,6 +24,6 @@ export const Content = styled.View`
 export const HomeTitle = styled.Text`
   font-family: 'Inter-SemiBold';
   font-size: ${scale(14)}px;
-  color: ${colorsLight.dark};
-  margin-bottom: ${scale(10)}px;
+  color: ${colors.dark};
+  margin-bottom: ${scale(20)}px;
 `;
