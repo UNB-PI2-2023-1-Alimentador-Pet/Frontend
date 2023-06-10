@@ -2,17 +2,14 @@ import React, {useRef, useState} from 'react';
 import {Alert, Keyboard} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-import {Container} from './styles';
-import {ScrollViewStyled, InputText} from '../../../components/Defaults';
-import {ButtonPrimary, ButtonText} from '../../../components/ButtonPrimary';
-import {colorsLight} from '../../../utils/colors';
+import LoadingModal from '../../../components/LoadingModal';
+import {ScreenContainer, ScrollArea} from '../../../components/Defaults';
+import {InputPrimary} from '../../../components/Inputs';
+import {ButtonPrimary, ButtonText} from '../../../components/Buttons';
+import {colors} from '../../../utils/colors';
 
 import {useUser} from '../../../hooks/user';
-import {
-  sendWiFiData,
-  getDeviceStatus,
-  restartDevice,
-} from '../../../services/device';
+import {sendWiFiData, getStatus, restart} from '../../../services/device';
 
 const SendData = ({navigation, route}) => {
   const {user, devices, storeDevices} = useUser();
@@ -20,55 +17,71 @@ const SendData = ({navigation, route}) => {
 
   const [nome, setNome] = useState(ssid);
   const [senha, setSenha] = useState('');
-
-  const [isEditing, setIsEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const nomeInput = useRef();
   const senhaInput = useRef();
 
-  const restartAlimentador = async () => {
-    const response = await restartDevice();
+  const restartDevice = async () => {
+    setIsLoading(true);
+
+    const response = await restart();
+
+    setIsLoading(false);
 
     if (response.status === 200) {
       Alert.alert('Alimentador adicionado com sucesso');
       const newDevice = {
         id: 1,
         nome: 'Alimentador 1',
-        status: 'connected',
+        status: 'connecting',
       };
       storeDevices([...devices, newDevice]);
       navigation.navigate('Home');
     } else {
-      Alert.alert('Erro ao reiniciar alimentador');
+      Alert.alert(
+        'Erro ao reiniciar',
+        'Tente reiniciar o dispositivo manualmente.',
+      );
     }
   };
 
-  const getStatus = async () => {
-    let connected = true;
+  const getDeviceStatus = async () => {
+    setIsLoading(true);
+    let requests = 0;
 
-    while (connected) {
-      const response = await getDeviceStatus();
+    while (requests < 100) {
+      const response = await getStatus();
 
       console.warn(response.data);
 
       if (response.status === 200) {
-        if (response.data.status === 'connected') {
-          connected = false;
-          restartAlimentador();
+        if (response.data.status === 'connecting') {
+          requests = 100;
+          restartDevice();
         } else if (response.data.status === 'fail') {
-          Alert.alert('Digite a senha do Wifi novamente');
-          connected = false;
+          setIsLoading(false);
+          Alert.alert(
+            'Algo deu errado',
+            'Digite a senha da rede WiFi novamente ou troque de rede.',
+          );
+          requests = 100;
         }
       } else {
-        Alert.alert('Erro ao obter status');
-        connected = false;
-        break;
+        setIsLoading(false);
+        Alert.alert(
+          'Erro ao obter status',
+          'Tente conectar o dispositivo novamente.',
+        );
+        requests = 100;
       }
+      requests += 1;
     }
   };
 
   const handleSend = async () => {
     Keyboard.dismiss();
+    setIsLoading(true);
 
     const wifi = {
       ssid: nome,
@@ -80,17 +93,21 @@ const SendData = ({navigation, route}) => {
     console.warn(response);
 
     if (response.status === 200) {
-      getStatus();
+      getDeviceStatus();
     } else {
-      Alert.alert('Erro ao enviar dados');
+      setIsLoading(false);
+      Alert.alert(
+        'Erro ao enviar dados',
+        'Tente conectar ao dispositivo novamente.',
+      );
     }
   };
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: colorsLight.light}}>
-      <Container>
-        <ScrollViewStyled>
-          <InputText
+    <SafeAreaView style={{flex: 1, backgroundColor: colors.light}}>
+      <ScreenContainer>
+        <ScrollArea>
+          <InputPrimary
             ref={nomeInput}
             placeholder="SSID"
             maxLength={100}
@@ -99,7 +116,7 @@ const SendData = ({navigation, route}) => {
             onSubmitEditing={() => senhaInput.current?.focus()}
             returnKeyType="next"
           />
-          <InputText
+          <InputPrimary
             ref={senhaInput}
             placeholder="Senha"
             secureTextEntry
@@ -112,8 +129,10 @@ const SendData = ({navigation, route}) => {
           <ButtonPrimary onPress={() => handleSend()}>
             <ButtonText>Salvar</ButtonText>
           </ButtonPrimary>
-        </ScrollViewStyled>
-      </Container>
+        </ScrollArea>
+
+        <LoadingModal visible={isLoading} />
+      </ScreenContainer>
     </SafeAreaView>
   );
 };

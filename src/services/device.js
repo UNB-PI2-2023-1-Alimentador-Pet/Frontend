@@ -14,7 +14,7 @@ export const sendWiFiData = async data => {
   return response;
 };
 
-export const getDeviceStatus = async () => {
+export const getStatus = async () => {
   let response = {};
 
   try {
@@ -26,7 +26,7 @@ export const getDeviceStatus = async () => {
   return response;
 };
 
-export const restartDevice = async () => {
+export const restart = async () => {
   let response = {};
 
   try {
