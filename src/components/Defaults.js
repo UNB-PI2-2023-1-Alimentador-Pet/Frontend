@@ -48,7 +48,8 @@ export const SubTitleSecondary = styled.Text`
 `;
 
 export const Tooltip = styled.View`
-  padding: ${scale(20)}px;
+  padding-vertical: ${scale(14)}px;
+  padding-horizontal: ${scale(14)}px;
   margin-bottom: ${scale(18)}px;
   flex-direction: row;
 `;
@@ -56,7 +57,7 @@ export const Tooltip = styled.View`
 export const TooltipIconWrapper = styled.View`
   align-items: center;
   justify-content: center;
-  margin-right: ${scale(14)}px;
+  margin-right: ${scale(12)}px;
 `;
 
 export const TooltipTextWrapper = styled.View`

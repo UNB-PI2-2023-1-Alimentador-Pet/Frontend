@@ -3,11 +3,10 @@ import {PermissionsAndroid, TouchableOpacity} from 'react-native';
 import {CircleNotch, WifiHigh} from 'phosphor-react-native';
 import WifiManager from 'react-native-wifi-reborn';
 
+import Item from '../../../components/Item';
 import {ScreenContainer, Content} from './styles';
 import {
   ScrollArea,
-  Item,
-  ItemTitle,
   Tooltip,
   TooltipIconWrapper,
   TooltipTextWrapper,
@@ -16,7 +15,7 @@ import {
 } from '../../../components/Defaults';
 import Spinner from '../../../components/Spinner';
 import {colors} from '../../../utils/colors';
-import {scale, percentage} from '../../../utils/scalling';
+import {scale} from '../../../utils/scalling';
 
 const AddDevice = ({navigation}) => {
   const [wifiEnabled, setWifiEnabled] = useState(false);
@@ -29,17 +28,16 @@ const AddDevice = ({navigation}) => {
         console.log('Your current connected wifi SSID is ' + ssid);
         setCurrentWifiSSID(ssid);
       },
-      () => {
-        console.log('Cannot get current SSID!');
+      e => {
+        console.log('Cannot get current SSID!', e);
       },
     );
   };
 
   const tryToConnectDevice = ssid => {
-    console.log('try to connect to', ssid);
     WifiManager.connectToProtectedSSID(ssid, '12345678', false, false).then(
-      s => {
-        console.warn('Connected successfully!', s);
+      () => {
+        console.warn('Connected successfully!');
         navigation.navigate('SendData', {ssid: currentWifiSSID});
       },
       e => {
@@ -94,8 +92,8 @@ const AddDevice = ({navigation}) => {
                 <Spinner>
                   <CircleNotch
                     color={colors.primary}
-                    weight="fill"
-                    size={scale(24)}
+                    weight="duotone"
+                    size={scale(22)}
                   />
                 </Spinner>
               </TooltipIconWrapper>
@@ -114,7 +112,7 @@ const AddDevice = ({navigation}) => {
               <WifiHigh
                 color={colors.primary}
                 weight="regular"
-                size={scale(28)}
+                size={scale(22)}
               />
             </TooltipIconWrapper>
 
@@ -127,13 +125,13 @@ const AddDevice = ({navigation}) => {
         <Content>
           <SubTitleSecondary>Dispositivos encontrados</SubTitleSecondary>
           {wifiList.map(wifi => (
-            <TouchableOpacity
-              key={wifi.SSID}
-              onPress={() => tryToConnectDevice(wifi.SSID)}>
-              <Item>
-                <ItemTitle>{wifi.SSID}</ItemTitle>
-              </Item>
-            </TouchableOpacity>
+            <Item
+              key={wifi.BSSID}
+              image={require('../../../assets/imgs/alimentador.png')}
+              title={wifi.SSID}
+              onPress={() => tryToConnectDevice(wifi.SSID)}
+              gray
+            />
           ))}
         </Content>
       </ScrollArea>

@@ -7,7 +7,7 @@ export const ItemContainer = styled.TouchableOpacity.attrs(props => ({
   activeOpacity: props.onPress ? 0.5 : 1,
 }))`
   width: 100%;
-  background-color: ${colors.light};
+  background-color: ${props => (props.gray ? colors.lightGray : colors.light)};
   border-radius: ${scale(12)}px;
   padding: ${scale(16)}px;
   margin-bottom: ${scale(18)}px;
@@ -17,7 +17,7 @@ export const ItemContainer = styled.TouchableOpacity.attrs(props => ({
 export const ItemImage = styled.Image`
   width: ${scale(44)}px;
   height: ${scale(54)}px;
-  border-radius: ${scale(8)}px;
+  border-radius: ${scale(4)}px;
   resize-mode: contain;
   margin-right: ${scale(18)}px;
 `;

@@ -18,8 +18,7 @@ const Home = ({navigation}) => {
       <StatusBar backgroundColor={colors.lightGray} barStyle="dark-content" />
       <ScreenContainer>
         <Header>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('SendData', {ssid: 'Wifi'})}>
+          <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
             <UserCircle color={colors.primary} weight="fill" size={scale(30)} />
           </TouchableOpacity>
 

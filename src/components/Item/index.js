@@ -16,7 +16,7 @@ import {scale} from '../../utils/scalling';
 
 const Item = props => {
   return (
-    <ItemContainer onPress={props.onPress}>
+    <ItemContainer onPress={props.onPress} gray={props.gray}>
       {props.image && <ItemImage source={props.image} />}
       {props.icon && <ItemIcon>{props.icon}</ItemIcon>}
 

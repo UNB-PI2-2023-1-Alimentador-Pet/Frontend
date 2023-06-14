@@ -1,12 +1,11 @@
 import styled from 'styled-components/native';
 
 import {colors} from '../../../utils/colors';
-import {scale, percentage} from '../../../utils/scalling';
+import {scale} from '../../../utils/scalling';
 
 export const ScreenContainer = styled.View`
   flex: 1;
   background-color: ${colors.light};
-  padding: ${scale(20)}px;
 `;
 
 export const ScrollArea = styled.ScrollView.attrs({
@@ -25,28 +24,22 @@ export const Header = styled.View`
   margin-bottom: ${scale(10)}px;
 `;
 
+export const Separator = styled.View`
+  width: 100%;
+  height: ${scale(10)}px;
+  border-bottom-width: 0.5px;
+  border-color: ${colors.darkGray};
+  padding-horizontal: ${scale(14)}px;
+`;
+
 export const Content = styled.View`
   flex: 1;
+  padding-horizontal: ${scale(14)}px;
 `;
 
 export const HomeTitle = styled.Text`
   font-family: 'Inter-SemiBold';
   font-size: ${scale(14)}px;
-  color: ${colors.dark};
-  margin-bottom: ${scale(10)}px;
-`;
-
-export const Item = styled.View`
-  width: 100%;
-  background-color: ${colors.mediumGray};
-  border-radius: ${scale(12)}px;
-  padding: ${scale(20)}px;
-  margin-bottom: ${scale(18)}px;
-`;
-
-export const ItemTitle = styled.Text`
-  font-size: ${scale(14)}px;
-  font-family: 'Inter-SemiBold';
   color: ${colors.dark};
   margin-bottom: ${scale(10)}px;
 `;

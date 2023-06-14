@@ -3,9 +3,17 @@ import {Alert, Keyboard} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 import LoadingModal from '../../../components/LoadingModal';
-import {ScreenContainer, ScrollArea} from '../../../components/Defaults';
+import {
+  ScreenContainer,
+  ScrollArea,
+  ContentContainer,
+} from '../../../components/Defaults';
 import {InputPrimary} from '../../../components/Inputs';
-import {ButtonPrimary, ButtonText} from '../../../components/Buttons';
+import {
+  ButtonWrapper,
+  ButtonPrimary,
+  ButtonText,
+} from '../../../components/Buttons';
 import {colors} from '../../../utils/colors';
 
 import {useUser} from '../../../hooks/user';
@@ -33,8 +41,8 @@ const SendData = ({navigation, route}) => {
       Alert.alert('Alimentador adicionado com sucesso');
       const newDevice = {
         id: 1,
-        nome: 'Alimentador 1',
-        status: 'connecting',
+        nome: 'MiAuFeeder-0001',
+        status: 'connected',
       };
       storeDevices([...devices, newDevice]);
       navigation.navigate('Home');
@@ -107,28 +115,34 @@ const SendData = ({navigation, route}) => {
     <SafeAreaView style={{flex: 1, backgroundColor: colors.light}}>
       <ScreenContainer>
         <ScrollArea>
-          <InputPrimary
-            ref={nomeInput}
-            placeholder="SSID"
-            maxLength={100}
-            value={nome}
-            onChangeText={text => setNome(text)}
-            onSubmitEditing={() => senhaInput.current?.focus()}
-            returnKeyType="next"
-          />
-          <InputPrimary
-            ref={senhaInput}
-            placeholder="Senha"
-            secureTextEntry
-            maxLength={100}
-            value={senha}
-            onChangeText={text => setSenha(text)}
-            returnKeyType="done"
-          />
+          <ContentContainer>
+            <InputPrimary
+              ref={nomeInput}
+              placeholder="SSID"
+              maxLength={100}
+              value={nome}
+              onChangeText={text => setNome(text)}
+              onSubmitEditing={() => senhaInput.current?.focus()}
+              returnKeyType="next"
+            />
+            <InputPrimary
+              ref={senhaInput}
+              placeholder="Senha"
+              secureTextEntry
+              maxLength={100}
+              value={senha}
+              onChangeText={text => setSenha(text)}
+              returnKeyType="done"
+            />
+          </ContentContainer>
 
-          <ButtonPrimary onPress={() => handleSend()}>
-            <ButtonText>Salvar</ButtonText>
-          </ButtonPrimary>
+          <ContentContainer>
+            <ButtonWrapper>
+              <ButtonPrimary onPress={() => handleSend()}>
+                <ButtonText>Salvar</ButtonText>
+              </ButtonPrimary>
+            </ButtonWrapper>
+          </ContentContainer>
         </ScrollArea>
 
         <LoadingModal visible={isLoading} />
