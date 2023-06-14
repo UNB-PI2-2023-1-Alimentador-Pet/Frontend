@@ -63,7 +63,7 @@ const Profile = () => {
             <AvatarWrapper>
               <UserCircle
                 color={colors.primary}
-                weight="duotone"
+                weight="fill"
                 size={scale(134)}
               />
             </AvatarWrapper>

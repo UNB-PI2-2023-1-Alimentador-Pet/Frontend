@@ -3,11 +3,11 @@ import {NavigationContainer} from '@react-navigation/native';
 
 import AppProvider from './src/hooks';
 import Routes from './src/navigation/routes';
-import SplashScreen from 'react-native-splash-screen'
+import SplashScreen from 'react-native-splash-screen';
 
 function App() {
   useEffect(() => {
-    SplashScreen.hide()
+    SplashScreen.hide();
   });
 
   return (
