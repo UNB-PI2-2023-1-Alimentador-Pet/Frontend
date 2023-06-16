@@ -2,10 +2,18 @@
 
 # Rodar o projeto
 
-Instalar as dependências:
+0. Instalar as dependências:
 
 ```
 yarn install
+```
+
+Se estiver utilizando o iOS, instale também as dependências do CocoaPods:
+
+```
+cd ios
+pod install
+cd ..
 ```
 
 1. Instalar o app:

@@ -12,6 +12,10 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		41187C5B6BB14DE3A6D57AB1 /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FE07007ACFC0458ABD3EA4CD /* Inter-Medium.ttf */; };
+		5325B1A5187149218BF738C6 /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A0C30E035F97410F9293C2F2 /* Inter-Regular.ttf */; };
+		61991C3994274AAC82090650 /* Inter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A111A394FC21440D86203AE1 /* Inter-Bold.ttf */; };
+		6AB4E767F43D475AA195FB4C /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DE2C32F9418E4398895B28D6 /* Inter-SemiBold.ttf */; };
 		7699B88040F8A987B510C191 /* libPods-MiAuFeeder-MiAuFeederTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-MiAuFeeder-MiAuFeederTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
@@ -43,7 +47,11 @@
 		5DCACB8F33CDC322A6C60F78 /* libPods-MiAuFeeder.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MiAuFeeder.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = MiAuFeeder/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-MiAuFeeder-MiAuFeederTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MiAuFeeder-MiAuFeederTests.release.xcconfig"; path = "Target Support Files/Pods-MiAuFeeder-MiAuFeederTests/Pods-MiAuFeeder-MiAuFeederTests.release.xcconfig"; sourceTree = "<group>"; };
+		A0C30E035F97410F9293C2F2 /* Inter-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Regular.ttf"; path = "../src/assets/fonts/Inter-Regular.ttf"; sourceTree = "<group>"; };
+		A111A394FC21440D86203AE1 /* Inter-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Bold.ttf"; path = "../src/assets/fonts/Inter-Bold.ttf"; sourceTree = "<group>"; };
+		DE2C32F9418E4398895B28D6 /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-SemiBold.ttf"; path = "../src/assets/fonts/Inter-SemiBold.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		FE07007ACFC0458ABD3EA4CD /* Inter-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Medium.ttf"; path = "../src/assets/fonts/Inter-Medium.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +130,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				92DD81221A9A4A95B6922750 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -135,6 +144,17 @@
 				00E356EE1AD99517003FC87E /* MiAuFeederTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		92DD81221A9A4A95B6922750 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A111A394FC21440D86203AE1 /* Inter-Bold.ttf */,
+				FE07007ACFC0458ABD3EA4CD /* Inter-Medium.ttf */,
+				A0C30E035F97410F9293C2F2 /* Inter-Regular.ttf */,
+				DE2C32F9418E4398895B28D6 /* Inter-SemiBold.ttf */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
@@ -244,6 +264,10 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				61991C3994274AAC82090650 /* Inter-Bold.ttf in Resources */,
+				41187C5B6BB14DE3A6D57AB1 /* Inter-Medium.ttf in Resources */,
+				5325B1A5187149218BF738C6 /* Inter-Regular.ttf in Resources */,
+				6AB4E767F43D475AA195FB4C /* Inter-SemiBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -498,7 +522,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.miaufeeder;
 				PRODUCT_NAME = MiAuFeeder;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -524,7 +548,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.miaufeeder;
 				PRODUCT_NAME = MiAuFeeder;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
