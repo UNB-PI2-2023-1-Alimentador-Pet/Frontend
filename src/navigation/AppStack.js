@@ -7,6 +7,7 @@ import SendData from '../screens/app/SendData';
 
 import {colors} from '../utils/colors';
 import {scale} from '../utils/scalling';
+import Feeder from '../screens/app/Feeder';
 
 const Stack = createNativeStackNavigator();
 
@@ -39,6 +40,11 @@ const AppStack = () => {
         name="SendData"
         component={SendData}
         options={{title: 'Informações da rede WiFi'}}
+      />
+      <Stack.Screen
+        name="Feeder"
+        component={Feeder}
+        options={{title: 'Alimentador'}}
       />
     </Stack.Navigator>
   );
