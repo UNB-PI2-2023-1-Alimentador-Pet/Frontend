@@ -31,8 +31,8 @@ const Home = ({navigation}) => {
           <HomeTitle>Todos os dispositivos</HomeTitle>
 
           {devices.length === 0 && (
-            <Item 
-              title={'Nenhum dispositivo adicionado'} 
+            <Item
+              title={'Nenhum dispositivo adicionado'}
               onPress={() => navigation.navigate('Feeder')}
             />
           )}
