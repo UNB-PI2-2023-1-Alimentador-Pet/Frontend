@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {StatusBar, Text, TouchableOpacity} from 'react-native';
-import {ScreenContainer, Row, LeadingTitle, SaveButton} from './styles';
+import {StatusBar} from 'react-native';
+import {ScreenContainer, Row, LeadingTitle} from './styles';
 import {colors} from '../../../utils/colors';
 import {Content} from '../Home/styles';
 import {
