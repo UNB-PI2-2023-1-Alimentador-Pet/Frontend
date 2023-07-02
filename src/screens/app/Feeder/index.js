@@ -1,36 +1,91 @@
-import React from 'react';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import React, {useState} from 'react';
 import {StatusBar} from 'react-native';
-import {ScreenContainer, Header} from './styles';
-import {colors} from '../../../utils/colors';
+import {
+  SlidersHorizontal,
+  ChartLineUp,
+  Calendar,
+  ClockCounterClockwise,
+} from 'phosphor-react-native';
+
+import {
+  ScreenContainer,
+  FeedContainer,
+  FeedButton,
+  Feed,
+  BowlImage,
+  FeedText,
+  ActionsButton,
+} from './styles';
 import Item from '../../../components/Item';
 import {Content} from '../Home/styles';
-import {Calendar} from 'phosphor-react-native';
+import {colors} from '../../../utils/colors';
 import {scale} from '../../../utils/scalling';
 
 const Feeder = ({navigation}) => {
+  const [isBowlFull, setIsBowlFull] = useState(true);
+
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: colors.lightGray}}>
-      <StatusBar backgroundColor={colors.lightGray} barStyle="dark-content" />
-      <ScreenContainer>
-        <Header style={{backgroundColor: colors.mediumGray}} />
-        <Content>
-          <Item
-            title={'Agenda'}
-            // Todo: Buscar da API
-            subtitle={'Próxima refeição 20:45'}
-            icon={
-              <Calendar
-                color={colors.light}
-                size={scale(24)}
-                weight="duotone"
-              />
-            }
-            onIconPress={() => navigation.navigate('Scheduler')}
+    <ScreenContainer>
+      <StatusBar backgroundColor={colors.primary} barStyle="dark-content" />
+
+      <FeedContainer>
+        <ActionsButton>
+          <SlidersHorizontal
+            color={colors.primary}
+            weight="regular"
+            size={scale(24)}
           />
-        </Content>
-      </ScreenContainer>
-    </SafeAreaView>
+        </ActionsButton>
+
+        <FeedButton onPress={() => setIsBowlFull(!isBowlFull)}>
+          <Feed>
+            {isBowlFull ? (
+              <BowlImage
+                source={require('../../../assets/imgs/bowl-full.png')}
+              />
+            ) : (
+              <BowlImage
+                source={require('../../../assets/imgs/bowl-empty.png')}
+              />
+            )}
+            <FeedText>Alimentar</FeedText>
+          </Feed>
+        </FeedButton>
+
+        <ActionsButton>
+          <ChartLineUp
+            color={colors.primary}
+            weight="regular"
+            size={scale(24)}
+          />
+        </ActionsButton>
+      </FeedContainer>
+
+      <Content>
+        <Item
+          title={'Agenda'}
+          // Todo: Buscar da API
+          subtitle={'Próxima refeição 20:45'}
+          icon={
+            <Calendar color={colors.light} size={scale(28)} weight="duotone" />
+          }
+          onIconPress={() => navigation.navigate('Scheduler')}
+        />
+        <Item
+          title={'Histórico'}
+          // Todo: Buscar da API
+          subtitle={'17/05/2023 08:45 - Ração'}
+          icon={
+            <ClockCounterClockwise
+              color={colors.light}
+              size={scale(28)}
+              weight="duotone"
+            />
+          }
+          onIconPress={() => navigation.navigate('Scheduler')}
+        />
+      </Content>
+    </ScreenContainer>
   );
 };
 
