@@ -82,7 +82,7 @@ const Feeder = ({navigation}) => {
               weight="duotone"
             />
           }
-          onIconPress={() => navigation.navigate('Scheduler')}
+          onIconPress={() => navigation.navigate('History')}
         />
       </Content>
     </ScreenContainer>

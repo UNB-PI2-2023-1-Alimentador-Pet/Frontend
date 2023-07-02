@@ -23,9 +23,9 @@ export const ItemImage = styled.Image`
 `;
 
 export const ItemIcon = styled.View`
-  width: ${scale(48)}px;
-  height: ${scale(48)}px;
-  border-radius: ${scale(48)}px;
+  width: ${scale(46)}px;
+  height: ${scale(46)}px;
+  border-radius: ${scale(46)}px;
   margin-right: ${scale(18)}px;
   align-items: center;
   justify-content: center;
