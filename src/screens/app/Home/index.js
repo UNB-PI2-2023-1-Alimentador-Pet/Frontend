@@ -42,7 +42,7 @@ const Home = ({navigation}) => {
               key={device.id}
               image={require('../../../assets/imgs/alimentador.png')}
               title={device.nome}
-              onPress={() => console.log('Tela do alimentador')}
+              onPress={() => navigation.navigate('Feeder')}
             />
           ))}
         </Content>

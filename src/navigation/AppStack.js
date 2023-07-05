@@ -14,6 +14,7 @@ import Feeder from '../screens/app/Feeder';
 import Scheduler from '../screens/app/Scheduler';
 import AddSchedule from '../screens/app/AddSchedule';
 import History from '../screens/app/History';
+import Report from '../screens/app/Report';
 
 const Stack = createNativeStackNavigator();
 
@@ -31,6 +32,7 @@ const AppStack = () => {
           fontSize: scale(15),
         },
         headerTitleAlign: 'center',
+        headerStyle: {backgroundColor: colors.lightGray},
       }}>
       <Stack.Screen
         name="HomeTabBar"
@@ -75,7 +77,7 @@ const AppStack = () => {
               <PlusCircle
                 color={colors.primary}
                 weight="fill"
-                size={scale(30)}
+                size={scale(28)}
               />
             </TouchableOpacity>
           ),
@@ -93,6 +95,13 @@ const AppStack = () => {
         component={History}
         options={{
           title: 'Histórico',
+        }}
+      />
+      <Stack.Screen
+        name="Report"
+        component={Report}
+        options={{
+          title: 'Relatório',
         }}
       />
     </Stack.Navigator>
