@@ -1,5 +1,29 @@
 import api from './api';
 
+export const changePassword = async data => {
+  let response = {};
+
+  try {
+    response = await api.post('/users/reset-password', data);
+  } catch (err) {
+    console.log(err);
+  }
+
+  return response;
+};
+
+export const sendToken = async data => {
+  let response = {};
+
+  try {
+    response = await api.post('/users/forgot-password', data);
+  } catch (err) {
+    console.log(err);
+  }
+
+  return response;
+};
+
 export const getUser = async (hash, token) => {
   let response = {};
 
