@@ -11,11 +11,14 @@ import {
 } from '../../../components/Buttons';
 import SelectPicker from '../../../components/SelectPicker';
 import DatePicker from 'react-native-date-picker';
-import {createSchedule} from '../../../services/schedule';
+import {updateSchedule, deleteSchedule} from '../../../services/schedule';
 import {useUser} from '../../../hooks/user';
+import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 
-const AddSchedule = ({navigation, route}) => {
+const EditSchedule = ({navigation, route}) => {
+  const isFocused = useIsFocused();
   const [isLoading, setIsLoading] = useState(false);
+  const {data} = route.params;
   const {user, token} = useUser();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState([]);
@@ -50,9 +53,26 @@ const AddSchedule = ({navigation, route}) => {
   ]);
 
   const [date, setDate] = useState(new Date());
-  const isEditing = route.params?.isEditing;
 
-  const handleCreateSchedule = async () => {
+  useFocusEffect(
+    React.useCallback(() => {
+      setQuantity(data.quantidade.toString());
+      setValue(data.recorrencia.map(number => number.toString()));
+      setTime(data.tempoBandeja.toString());
+
+      const [hours, minutes, seconds] = data.horario.split(':');
+
+      const dateObject = new Date();
+      dateObject.setHours(hours);
+      dateObject.setMinutes(minutes);
+      dateObject.setSeconds(seconds);
+
+      setDate(dateObject);
+      setIsLoading(true);
+    }, [data.horario, data.quantidade, data.recorrencia, data.tempoBandeja]),
+  );
+
+  const handleEditSchedule = async () => {
     setIsLoading(true);
 
     const formattedDate = date.toLocaleTimeString([], {
@@ -71,28 +91,65 @@ const AddSchedule = ({navigation, route}) => {
       userHash: user.userHash,
     };
 
-    const response = await createSchedule(schedule, token);
+    const response = await updateSchedule(
+      data.horario,
+      data.quantidade,
+      user.userHash,
+      token,
+      schedule,
+    );
 
     setIsLoading(false);
 
     if (response.status === 200) {
-      Alert.alert('Alimentação agendada!');
+      Alert.alert(
+        'Agendamento atualizado!',
+        'O agendamento foi atualizado com sucesso.',
+        [
+          {
+            text: 'Ok',
+            onPress: () => navigation.goBack(),
+            style: 'success',
+          },
+        ],
+      );
     } else if (response.status === 500) {
       Alert.alert(
-        'Não foi possivel agendar, já existe um agendamento para o mesmo horário!',
+        'Não foi possivel atualizar, já existe um agendamento para o mesmo horário!',
       );
     } else {
-      Alert.alert('Não foi possivel agendar, tente novamente mais tarde!');
+      Alert.alert('Não foi possivel atualizar, tente novamente mais tarde!');
     }
   };
 
-  useEffect(() => {
-    if (isEditing) {
-      navigation.setOptions({headerTitle: 'Editar horário'});
+  const handleDeleteSchedule = async () => {
+    const response = await deleteSchedule(
+      data.horario,
+      data.quantidade,
+      user.userHash,
+      token,
+    );
+
+    console.log(response);
+
+    if (response.status === 200) {
+      Alert.alert(
+        'Agendamento excluido!',
+        'O agendamento foi excluido com sucesso.',
+        [
+          {
+            text: 'Ok',
+            onPress: () => navigation.goBack(),
+            style: 'success',
+          },
+        ],
+      );
+    } else if (response.status === 500) {
+      Alert.alert('Não foi possivel excluir, erro interno do servidor!');
     } else {
-      navigation.setOptions({headerTitle: 'Adicionar novo horário'});
+      Alert.alert('Não foi possivel excluir, tente novamente mais tarde!');
     }
-  }, [isEditing, navigation]);
+  };
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.lightGray}}>
@@ -102,6 +159,8 @@ const AddSchedule = ({navigation, route}) => {
           <Row>
             <LeadingTitle>Horário</LeadingTitle>
             <DatePicker
+              is24hourSource="locale"
+              locale="pt-br"
               style={{width: 200, height: 100}}
               date={date}
               mode="time"
@@ -153,19 +212,17 @@ const AddSchedule = ({navigation, route}) => {
             />
           </Row>
           <ButtonPrimary
-            onPress={() => handleCreateSchedule()}
+            onPress={() => handleEditSchedule()}
             style={{marginTop: 40}}>
             <ButtonText>Salvar</ButtonText>
           </ButtonPrimary>
-          {isEditing ? (
-            <ButtonSecondary>
-              <ButtonText>Excluir</ButtonText>
-            </ButtonSecondary>
-          ) : null}
+          <ButtonSecondary onPress={() => handleDeleteSchedule()}>
+            <ButtonText>Excluir</ButtonText>
+          </ButtonSecondary>
         </Content>
       </ScreenContainer>
     </SafeAreaView>
   );
 };
 
-export default AddSchedule;
+export default EditSchedule;

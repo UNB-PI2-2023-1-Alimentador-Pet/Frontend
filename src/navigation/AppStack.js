@@ -14,6 +14,8 @@ import Feeder from '../screens/app/Feeder';
 import Scheduler from '../screens/app/Scheduler';
 import AddSchedule from '../screens/app/AddSchedule';
 import History from '../screens/app/History';
+import EditSchedule from '../screens/app/EditSchedule';
+import Settings from '../screens/app/Settings';
 
 const Stack = createNativeStackNavigator();
 
@@ -69,9 +71,7 @@ const AppStack = () => {
           title: 'Agenda',
           headerRight: () => (
             <TouchableOpacity
-              onPress={() =>
-                navigation.navigate('AddSchedule', {isEditing: false})
-              }>
+              onPress={() => navigation.navigate('AddSchedule')}>
               <PlusCircle
                 color={colors.primary}
                 weight="fill"
@@ -89,10 +89,24 @@ const AppStack = () => {
         }}
       />
       <Stack.Screen
+        name="EditSchedule"
+        component={EditSchedule}
+        options={{
+          title: 'Editar horário',
+        }}
+      />
+      <Stack.Screen
         name="History"
         component={History}
         options={{
           title: 'Histórico',
+        }}
+      />
+      <Stack.Screen
+        name="Settings"
+        component={Settings}
+        options={{
+          title: 'Configurações',
         }}
       />
     </Stack.Navigator>

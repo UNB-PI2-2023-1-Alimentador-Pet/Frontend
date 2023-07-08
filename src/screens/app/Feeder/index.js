@@ -29,7 +29,7 @@ const Feeder = ({navigation}) => {
       <StatusBar backgroundColor={colors.primary} barStyle="dark-content" />
 
       <FeedContainer>
-        <ActionsButton>
+        <ActionsButton onPress={() => navigation.navigate('Settings')}>
           <SlidersHorizontal
             color={colors.primary}
             weight="regular"
