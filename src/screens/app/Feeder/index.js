@@ -52,7 +52,7 @@ const Feeder = ({navigation}) => {
           </Feed>
         </FeedButton>
 
-        <ActionsButton>
+        <ActionsButton onPress={() => navigation.navigate('Report')}>
           <ChartLineUp
             color={colors.primary}
             weight="regular"
