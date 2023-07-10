@@ -5,7 +5,7 @@ import {TouchableOpacity} from 'react-native';
 import {Pencil, PlusCircle} from 'phosphor-react-native';
 
 import TabBar from './TabBar';
-import AddDevice from '../screens/app/AddDevice';
+import AddFeeder from '../screens/app/AddFeeder';
 import SendData from '../screens/app/SendData';
 
 import {colors} from '../utils/colors';
@@ -42,8 +42,8 @@ const AppStack = () => {
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="AddDevice"
-        component={AddDevice}
+        name="AddFeeder"
+        component={AddFeeder}
         options={{title: 'Adicionar dispositivo'}}
       />
       <Stack.Screen
@@ -59,8 +59,7 @@ const AppStack = () => {
           headerTintColor: colors.light,
           headerStyle: {backgroundColor: colors.primary},
           headerRight: () => (
-            <TouchableOpacity
-              onPress={() => navigation.navigate('AddSchedule')}>
+            <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
               <Pencil color={colors.light} weight="fill" size={scale(22)} />
             </TouchableOpacity>
           ),

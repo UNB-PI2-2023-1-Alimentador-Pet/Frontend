@@ -1,4 +1,5 @@
 import esp32 from './esp32';
+import api from './api';
 
 export const sendWiFiData = async data => {
   let response = {};
@@ -31,6 +32,22 @@ export const restart = async () => {
 
   try {
     response = await esp32.post('/restart');
+  } catch (err) {
+    console.log(err);
+  }
+
+  return response;
+};
+
+export const getFeeders = async (hash, token) => {
+  let response = {};
+
+  try {
+    response = await api.get(`/feeders/${hash}`, {
+      headers: {
+        Authorization: token,
+      },
+    });
   } catch (err) {
     console.log(err);
   }

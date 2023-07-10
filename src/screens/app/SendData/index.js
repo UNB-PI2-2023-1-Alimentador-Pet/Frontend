@@ -17,10 +17,10 @@ import {
 import {colors} from '../../../utils/colors';
 
 import {useUser} from '../../../hooks/user';
-import {sendWiFiData, getStatus, restart} from '../../../services/device';
+import {sendWiFiData, getStatus, restart} from '../../../services/feeder';
 
 const SendData = ({navigation, route}) => {
-  const {user, devices, storeDevices} = useUser();
+  const {user, feeders, storeFeeders} = useUser();
   const {ssid} = route.params;
 
   const [nome, setNome] = useState(ssid);
@@ -30,7 +30,7 @@ const SendData = ({navigation, route}) => {
   const nomeInput = useRef();
   const senhaInput = useRef();
 
-  const restartDevice = async () => {
+  const restartFeeder = async () => {
     setIsLoading(true);
 
     const response = await restart();
@@ -39,12 +39,12 @@ const SendData = ({navigation, route}) => {
 
     if (response.status === 200) {
       Alert.alert('Alimentador adicionado com sucesso');
-      const newDevice = {
+      const newFeeder = {
         id: 1,
         nome: 'MiAuFeeder-0001',
         status: 'connected',
       };
-      storeDevices([...devices, newDevice]);
+      storeFeeders([...feeders, newFeeder]);
       navigation.navigate('Home');
     } else {
       Alert.alert(
@@ -54,7 +54,7 @@ const SendData = ({navigation, route}) => {
     }
   };
 
-  const getDeviceStatus = async () => {
+  const getFeederStatus = async () => {
     setIsLoading(true);
     let requests = 0;
 
@@ -66,7 +66,7 @@ const SendData = ({navigation, route}) => {
       if (response.status === 200) {
         if (response.data.status === 'connecting') {
           requests = 100;
-          restartDevice();
+          restartFeeder();
         } else if (response.data.status === 'fail') {
           setIsLoading(false);
           Alert.alert(
@@ -101,7 +101,7 @@ const SendData = ({navigation, route}) => {
     console.warn(response);
 
     if (response.status === 200) {
-      getDeviceStatus();
+      getFeederStatus();
     } else {
       setIsLoading(false);
       Alert.alert(
