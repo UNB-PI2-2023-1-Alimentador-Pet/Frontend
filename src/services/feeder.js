@@ -54,3 +54,19 @@ export const getFeeders = async (hash, token) => {
 
   return response;
 };
+
+export const updateFeeder = async (data, hash, token) => {
+  let response = {};
+
+  try {
+    response = await api.put(`/feeders/${hash}`, data, {
+      headers: {
+        Authorization: token,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+
+  return response;
+};
