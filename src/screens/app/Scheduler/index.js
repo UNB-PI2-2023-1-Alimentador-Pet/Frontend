@@ -1,86 +1,82 @@
-import React, {useEffect, useState} from 'react';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {StatusBar, TouchableOpacity} from 'react-native';
-import {ScreenContainer, Header} from './styles';
+import React, {useCallback, useState} from 'react';
+import {StatusBar} from 'react-native';
+import {Calendar} from 'phosphor-react-native';
+import {useFocusEffect} from '@react-navigation/native';
+
+import LoadingModal from '../../../components/LoadingModal';
+import {ScreenContainer} from './styles';
 import {colors} from '../../../utils/colors';
 import Item from '../../../components/Item';
 import {Content} from '../Home/styles';
-import {PlusCircle, Calendar} from 'phosphor-react-native';
+
 import {scale} from '../../../utils/scalling';
+import {convertDaysOfWeek} from '../../../utils/consts';
 import {getSchedules} from '../../../services/schedule';
 import {useUser} from '../../../hooks/user';
-import {Text} from 'react-native';
-import {useFocusEffect} from '@react-navigation/native';
-import {useCallback} from 'react';
 
 const Scheduler = ({navigation}) => {
-  const {user, token} = useUser();
-  const [schedules, setSchedules] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const convertDaysOfWeek = days => {
-    const daysOfWeek = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
-    const convertedDays = days.map(day => daysOfWeek[day]);
-    return convertedDays.join(', ');
-  };
+  const {user, token, schedules, storeSchedules} = useUser();
 
-  useEffect(() => {
-    fetchSchedules();
-  }, [user.userHash, token, fetchSchedules]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchSchedules = useCallback(async () => {
-    setIsLoading(true);
+    const response = await getSchedules(user.userHash, token);
 
-    try {
-      const response = await getSchedules(user.userHash, token);
+    setIsLoading(false);
 
-      if (response.status === 200) {
-        setSchedules(response.data);
+    if (response.status === 200) {
+      if (response.data.length) {
+        storeSchedules(response.data);
       }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
     }
-  }, [token, user.userHash]);
+  }, [user.userHash, token]);
 
-  useFocusEffect(() => {
-    fetchSchedules();
-  });
+  useFocusEffect(
+    useCallback(() => {
+      fetchSchedules();
+    }, [fetchSchedules]),
+  );
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: colors.lightGray}}>
+    <ScreenContainer>
       <StatusBar backgroundColor={colors.lightGray} barStyle="dark-content" />
-      <ScreenContainer>
-        <Content>
-          {schedules.length > 0 ? (
-            schedules.map((item, index) => (
-              <Item
-                key={index}
-                title={item.horario}
-                // Todo: Buscar da API
-                subtitle={`${item.quantidade}g - ${convertDaysOfWeek(
-                  item.recorrencia,
-                )}`}
-                icon={
-                  <Calendar
-                    color={colors.light}
-                    size={scale(24)}
-                    weight="duotone"
-                  />
-                }
-                onIconPress={() =>
-                  navigation.navigate('EditSchedule', {data: item})
-                }
+      <Content>
+        {schedules.length > 0 ? (
+          schedules.map(item => (
+            <Item
+              key={item.horario}
+              title={item.horario}
+              subtitle={`${item.quantidade}g - ${convertDaysOfWeek(
+                item.recorrencia,
+              )}`}
+              icon={
+                <Calendar
+                  color={colors.light}
+                  size={scale(24)}
+                  weight="duotone"
+                />
+              }
+              onIconPress={() =>
+                navigation.navigate('EditSchedule', {data: item})
+              }
+            />
+          ))
+        ) : (
+          <Item
+            title="Nenhum horário cadastrado"
+            icon={
+              <Calendar
+                color={colors.light}
+                size={scale(24)}
+                weight="duotone"
               />
-            ))
-          ) : isLoading ? (
-            <Text>Carregando...</Text>
-          ) : (
-            <Text>Nenhum agendamento encontrado.</Text>
-          )}
-        </Content>
-      </ScreenContainer>
-    </SafeAreaView>
+            }
+          />
+        )}
+      </Content>
+
+      <LoadingModal visible={isLoading} />
+    </ScreenContainer>
   );
 };
 
