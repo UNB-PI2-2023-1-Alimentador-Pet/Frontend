@@ -44,12 +44,18 @@ const AppStack = () => {
       <Stack.Screen
         name="AddFeeder"
         component={AddFeeder}
-        options={{title: 'Adicionar dispositivo'}}
+        options={{
+          title: 'Adicionar dispositivo',
+          headerStyle: {backgroundColor: colors.light},
+        }}
       />
       <Stack.Screen
         name="SendData"
         component={SendData}
-        options={{title: 'Informações da rede WiFi'}}
+        options={{
+          title: 'Informações da rede WiFi',
+          headerStyle: {backgroundColor: colors.light},
+        }}
       />
       <Stack.Screen
         name="Feeder"
@@ -58,11 +64,6 @@ const AppStack = () => {
           title: 'Alimentador',
           headerTintColor: colors.light,
           headerStyle: {backgroundColor: colors.primary},
-          headerRight: () => (
-            <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
-              <Pencil color={colors.light} weight="fill" size={scale(22)} />
-            </TouchableOpacity>
-          ),
         })}
       />
       <Stack.Screen

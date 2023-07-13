@@ -138,6 +138,7 @@ const Settings = ({navigation, route}) => {
               setOpen={setOpenTime}
             />
           </Row>
+          {/*
           <Row>
             <LeadingTitle>Gravação a ser tocada</LeadingTitle>
             <AudioSelect>
@@ -147,6 +148,7 @@ const Settings = ({navigation, route}) => {
               </TouchableOpacity>
             </AudioSelect>
           </Row>
+          */}
 
           <Text style={{textAlign: 'center'}}>
             Essas são as configurações padrão ao tocar no botão “Alimentar” do
