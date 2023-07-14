@@ -70,3 +70,35 @@ export const updateFeeder = async (data, hash, token) => {
 
   return response;
 };
+
+export const createFeeder = async (data, token) => {
+  let response = {};
+
+  try {
+    response = await api.post('/feeders/new', data, {
+      headers: {
+        Authorization: token,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+
+  return response;
+};
+
+export const sendFood = async (data, token) => {
+  let response = {};
+
+  try {
+    response = await api.post('/receive-feed-info', data, {
+      headers: {
+        Authorization: token,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+
+  return response;
+};

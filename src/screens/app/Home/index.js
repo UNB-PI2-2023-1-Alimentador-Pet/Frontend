@@ -17,14 +17,22 @@ const Home = ({navigation}) => {
   const fetchFeeders = async () => {
     const response = await getFeeders(user.userHash, token);
 
+    console.log('feeder', response.data);
+
     if (response.status === 200) {
-      storeFeeders(response.data);
+      if (!response.data?.message) {
+        storeFeeders(response.data);
+      } else {
+        storeFeeders([]);
+      }
     }
   };
 
   useEffect(() => {
-    fetchFeeders();
-  }, []);
+    if (token) {
+      fetchFeeders();
+    }
+  }, [user.userHash, token]);
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.lightGray}}>
@@ -35,7 +43,7 @@ const Home = ({navigation}) => {
             <UserCircle color={colors.primary} weight="fill" size={scale(30)} />
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => navigation.navigate('AddDevice')}>
+          <TouchableOpacity onPress={() => navigation.navigate('AddFeeder')}>
             <PlusCircle color={colors.primary} weight="fill" size={scale(30)} />
           </TouchableOpacity>
         </Header>

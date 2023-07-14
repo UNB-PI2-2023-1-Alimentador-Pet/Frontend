@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Alert, StatusBar} from 'react-native';
 import {ScreenContainer, Row, LeadingTitle} from './styles';
@@ -13,44 +13,33 @@ import SelectPicker from '../../../components/SelectPicker';
 import DatePicker from 'react-native-date-picker';
 import {createSchedule} from '../../../services/schedule';
 import {useUser} from '../../../hooks/user';
+import {
+  weekChoices,
+  quantityChoices,
+  timeChoices,
+} from '../../../utils/selector';
 
 const AddSchedule = ({navigation, route}) => {
   const [isLoading, setIsLoading] = useState(false);
   const {user, token} = useUser();
+  const feeder = route.params?.data;
+  const isEditing = route.params?.isEditing;
+
+  console.log(route.params);
+
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState([]);
-  const [items, setItems] = useState([
-    {label: 'Domingo', value: '0'},
-    {label: 'Segunda', value: '1'},
-    {label: 'Terça', value: '2'},
-    {label: 'Quarta', value: '3'},
-    {label: 'Quinta', value: '4'},
-    {label: 'Sexta', value: '5'},
-    {label: 'Sábado', value: '6'},
-  ]);
+  const [items, setItems] = useState(weekChoices);
 
   const [openQuantity, setOpenQuantity] = useState(false);
   const [quantity, setQuantity] = useState(null);
-  const [quantityItems, setQuantityItems] = useState([
-    {label: '100g', value: '100'},
-    {label: '130g', value: '130'},
-    {label: '150g', value: '150'},
-    {label: '180g', value: '180'},
-    {label: '200g', value: '200'},
-  ]);
+  const [quantityItems, setQuantityItems] = useState(quantityChoices);
 
   const [openTime, setOpenTime] = useState(false);
   const [time, setTime] = useState(null);
-  const [timeItems, setTimeItems] = useState([
-    {label: '1min', value: '1'},
-    {label: '3min', value: '3'},
-    {label: '5min', value: '5'},
-    {label: '10min', value: '10'},
-    {label: '15min', value: '15'},
-  ]);
+  const [timeItems, setTimeItems] = useState(timeChoices);
 
   const [date, setDate] = useState(new Date());
-  const isEditing = route.params?.isEditing;
 
   const handleCreateSchedule = async () => {
     setIsLoading(true);
@@ -69,14 +58,17 @@ const AddSchedule = ({navigation, route}) => {
       horario: formattedDate,
       tempoBandeja: time,
       userHash: user.userHash,
+      token: feeder.token,
     };
 
     const response = await createSchedule(schedule, token);
 
+    console.log(response);
+
     setIsLoading(false);
 
     if (response.status === 200) {
-      Alert.alert('Alimentação agendada!');
+      navigation.navigate('Scheduler', {data: feeder});
     } else if (response.status === 500) {
       Alert.alert(
         'Não foi possivel agendar, já existe um agendamento para o mesmo horário!',
@@ -85,14 +77,6 @@ const AddSchedule = ({navigation, route}) => {
       Alert.alert('Não foi possivel agendar, tente novamente mais tarde!');
     }
   };
-
-  useEffect(() => {
-    if (isEditing) {
-      navigation.setOptions({headerTitle: 'Editar horário'});
-    } else {
-      navigation.setOptions({headerTitle: 'Adicionar novo horário'});
-    }
-  }, [isEditing, navigation]);
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.lightGray}}>
@@ -105,10 +89,8 @@ const AddSchedule = ({navigation, route}) => {
               style={{width: 200, height: 100}}
               date={date}
               mode="time"
-              onDateChange={date => {
-                console.log(date);
-                setDate(date);
-              }}
+              theme="light"
+              onDateChange={setDate}
             />
           </Row>
           <Row style={{marginTop: 30, zIndex: 10}}>
@@ -152,11 +134,13 @@ const AddSchedule = ({navigation, route}) => {
               setOpen={setOpenTime}
             />
           </Row>
+
           <ButtonPrimary
             onPress={() => handleCreateSchedule()}
             style={{marginTop: 40}}>
             <ButtonText>Salvar</ButtonText>
           </ButtonPrimary>
+
           {isEditing ? (
             <ButtonSecondary>
               <ButtonText>Excluir</ButtonText>

@@ -1,6 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {Alert, StatusBar} from 'react-native';
+import {Alert, StatusBar, Switch} from 'react-native';
+import {useFocusEffect} from '@react-navigation/native';
+
 import {ScreenContainer, Row, LeadingTitle} from './styles';
 import {colors} from '../../../utils/colors';
 import {Content} from '../Home/styles';
@@ -13,49 +15,36 @@ import SelectPicker from '../../../components/SelectPicker';
 import DatePicker from 'react-native-date-picker';
 import {updateSchedule, deleteSchedule} from '../../../services/schedule';
 import {useUser} from '../../../hooks/user';
-import {useFocusEffect, useIsFocused} from '@react-navigation/native';
+import {
+  weekChoices,
+  quantityChoices,
+  timeChoices,
+} from '../../../utils/selector';
 
 const EditSchedule = ({navigation, route}) => {
-  const isFocused = useIsFocused();
   const [isLoading, setIsLoading] = useState(false);
-  const {data} = route.params;
+
+  const data = route.params?.data;
   const {user, token} = useUser();
+
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState([]);
-  const [items, setItems] = useState([
-    {label: 'Domingo', value: '0'},
-    {label: 'Segunda', value: '1'},
-    {label: 'Terça', value: '2'},
-    {label: 'Quarta', value: '3'},
-    {label: 'Quinta', value: '4'},
-    {label: 'Sexta', value: '5'},
-    {label: 'Sábado', value: '6'},
-  ]);
+  const [items, setItems] = useState(weekChoices);
 
   const [openQuantity, setOpenQuantity] = useState(false);
   const [quantity, setQuantity] = useState(null);
-  const [quantityItems, setQuantityItems] = useState([
-    {label: '100g', value: '100'},
-    {label: '130g', value: '130'},
-    {label: '150g', value: '150'},
-    {label: '180g', value: '180'},
-    {label: '200g', value: '200'},
-  ]);
+  const [quantityItems, setQuantityItems] = useState(quantityChoices);
 
   const [openTime, setOpenTime] = useState(false);
   const [time, setTime] = useState(null);
-  const [timeItems, setTimeItems] = useState([
-    {label: '1min', value: '1'},
-    {label: '3min', value: '3'},
-    {label: '5min', value: '5'},
-    {label: '10min', value: '10'},
-    {label: '15min', value: '15'},
-  ]);
+  const [timeItems, setTimeItems] = useState(timeChoices);
 
+  const [isEnable, setIsEnable] = useState(false);
   const [date, setDate] = useState(new Date());
 
   useFocusEffect(
-    React.useCallback(() => {
+    useCallback(() => {
+      setIsEnable(data.ativo);
       setQuantity(data.quantidade.toString());
       setValue(data.recorrencia.map(number => number.toString()));
       setTime(data.tempoBandeja.toString());
@@ -66,10 +55,14 @@ const EditSchedule = ({navigation, route}) => {
       dateObject.setHours(hours);
       dateObject.setMinutes(minutes);
       dateObject.setSeconds(seconds);
-
       setDate(dateObject);
-      setIsLoading(true);
-    }, [data.horario, data.quantidade, data.recorrencia, data.tempoBandeja]),
+    }, [
+      data.ativo,
+      data.horario,
+      data.quantidade,
+      data.recorrencia,
+      data.tempoBandeja,
+    ]),
   );
 
   const handleEditSchedule = async () => {
@@ -83,7 +76,7 @@ const EditSchedule = ({navigation, route}) => {
     });
 
     const schedule = {
-      ativo: true,
+      ativo: isEnable,
       quantidade: quantity,
       recorrencia: value,
       horario: formattedDate,
@@ -98,6 +91,8 @@ const EditSchedule = ({navigation, route}) => {
       token,
       schedule,
     );
+
+    console.log(response);
 
     setIsLoading(false);
 
@@ -157,6 +152,16 @@ const EditSchedule = ({navigation, route}) => {
       <ScreenContainer>
         <Content>
           <Row>
+            <LeadingTitle>Ativo</LeadingTitle>
+            <Switch
+              trackColor={{false: '#767577', true: colors.primary}}
+              thumbColor={isEnable ? colors.white : colors.white}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={() => setIsEnable(!isEnable)}
+              value={isEnable}
+            />
+          </Row>
+          <Row>
             <LeadingTitle>Horário</LeadingTitle>
             <DatePicker
               is24hourSource="locale"
@@ -164,10 +169,8 @@ const EditSchedule = ({navigation, route}) => {
               style={{width: 200, height: 100}}
               date={date}
               mode="time"
-              onDateChange={date => {
-                console.log(date);
-                setDate(date);
-              }}
+              theme="light"
+              onDateChange={setDate}
             />
           </Row>
           <Row style={{marginTop: 30, zIndex: 10}}>
@@ -211,11 +214,13 @@ const EditSchedule = ({navigation, route}) => {
               setOpen={setOpenTime}
             />
           </Row>
+
           <ButtonPrimary
             onPress={() => handleEditSchedule()}
             style={{marginTop: 40}}>
             <ButtonText>Salvar</ButtonText>
           </ButtonPrimary>
+
           <ButtonSecondary onPress={() => handleDeleteSchedule()}>
             <ButtonText>Excluir</ButtonText>
           </ButtonSecondary>

@@ -1,12 +1,11 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {StatusBar} from 'react-native';
+import {StatusBar, Alert} from 'react-native';
 import {
   SlidersHorizontal,
   ChartLineUp,
   Calendar,
   ClockCounterClockwise,
 } from 'phosphor-react-native';
-import Paho from 'paho-mqtt';
 
 import {
   ScreenContainer,
@@ -23,52 +22,32 @@ import {colors} from '../../../utils/colors';
 import {scale} from '../../../utils/scalling';
 import {convertDaysOfWeek} from '../../../utils/consts';
 import {useUser} from '../../../hooks/user';
-
-const topic = `/testTopic`;
-
-// const client = mqtt.connect('mqtt://<broker-host>:<broker-port>');
-const client = new Paho.Client(
-  'broker.emqx.io',
-  8083,
-  topic,
-  'id_' + parseInt(Math.random()*100000),
-);
+import {sendFood} from '../../../services/feeder';
+import {formattedTime} from '../../../utils/consts';
 
 const Feeder = ({navigation, route}) => {
-  const {user, schedules} = useUser();
+  const {token, schedules, configs, history} = useUser();
   const feeder = route.params?.data;
+  const config = configs[feeder.token] || {};
+  const [lastHistory] = history;
 
   const [nextSchedule, setNextSchedule] = useState('');
   const [isBowlFull, setIsBowlFull] = useState(true);
 
-  console.log(client);
-  //console.log(feeder.token);
-  //console.log(user.userHash);
+  const sendFeederFood = async () => {
+    const newFood = {
+      topic: `feeder/${feeder.token}`,
+      action: 'feed',
+      quantidade: config.quantidade ? config.quantidade : 50,
+      tempoBandeja: config.tempoBandeja ? config.tempoBandeja : 1,
+    };
 
-  const sendMessage = (m) => {
-    const message = new Paho.Message(m.toString());
-    message.destinationName = topic;
-    client.send(message);
-  }
+    const response = await sendFood(newFood, token);
 
-  const onMessage = (message) => {
-    if (message.destinationName === topic) {
-      console.log(message.payloadString);
+    if (response.status === 200) {
+      Alert.alert('Seu pet será alimentado em breve');
     }
   };
-
-  useEffect(() => {
-    client.connect({
-      onSuccess: () => {
-        console.log('Connected!');
-        client.subscribe(topic);
-        client.onMessageArrived = onMessage;
-      },
-      onFailure: (err) => {
-        console.log(err);
-      },
-    });
-  }, []);
 
   const getNextSchedule = useCallback(() => {
     const todayDate = new Date();
@@ -133,7 +112,7 @@ const Feeder = ({navigation, route}) => {
           />
         </ActionsButton>
 
-        <FeedButton onPress={() => sendMessage("teste")}>
+        <FeedButton onPress={() => sendFeederFood()}>
           <Feed>
             {isBowlFull ? (
               <BowlImage
@@ -162,18 +141,23 @@ const Feeder = ({navigation, route}) => {
         <Item
           title={'Agenda'}
           subtitle={
-            nextSchedule ? `Próxima refeição ${nextSchedule}` : 'Sem refeições'
+            nextSchedule
+              ? `Próxima refeição ${nextSchedule}`
+              : 'Sem próximas refeições'
           }
           icon={
             <Calendar color={colors.light} size={scale(28)} weight="duotone" />
           }
-          onIconPress={() => navigation.navigate('Scheduler')}
+          onIconPress={() => navigation.navigate('Scheduler', {data: feeder})}
         />
 
         <Item
           title={'Histórico'}
-          // Todo: Buscar do MQTT
-          subtitle={'17/05/2023 08:45 - Ração'}
+          subtitle={
+            lastHistory
+              ? `${lastHistory.data} ${formattedTime(lastHistory.horario)}`
+              : 'Sem histórico'
+          }
           icon={
             <ClockCounterClockwise
               color={colors.light}
