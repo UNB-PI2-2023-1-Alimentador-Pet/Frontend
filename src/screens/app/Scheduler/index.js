@@ -10,23 +10,28 @@ import Item from '../../../components/Item';
 import {Content} from '../Home/styles';
 
 import {scale} from '../../../utils/scalling';
-import {convertDaysOfWeek} from '../../../utils/consts';
+import {convertDaysOfWeek, formattedTime} from '../../../utils/consts';
 import {getSchedules} from '../../../services/schedule';
 import {useUser} from '../../../hooks/user';
 
-const Scheduler = ({navigation}) => {
+const Scheduler = ({navigation, route}) => {
   const {user, token, schedules, storeSchedules} = useUser();
+  const feeder = route.params?.data;
 
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchSchedules = useCallback(async () => {
     const response = await getSchedules(user.userHash, token);
 
+    console.log('schedules', response.data);
+
     setIsLoading(false);
 
     if (response.status === 200) {
-      if (response.data.length) {
+      if (!response.data?.message) {
         storeSchedules(response.data);
+      } else {
+        storeSchedules([]);
       }
     }
   }, [user.userHash, token]);
@@ -45,7 +50,7 @@ const Scheduler = ({navigation}) => {
           schedules.map(item => (
             <Item
               key={item.horario}
-              title={item.horario}
+              title={formattedTime(item.horario)}
               subtitle={`${item.quantidade}g - ${convertDaysOfWeek(
                 item.recorrencia,
               )}`}
@@ -70,6 +75,9 @@ const Scheduler = ({navigation}) => {
                 size={scale(24)}
                 weight="duotone"
               />
+            }
+            onIconPress={() =>
+              navigation.navigate('AddSchedule', {data: feeder})
             }
           />
         )}

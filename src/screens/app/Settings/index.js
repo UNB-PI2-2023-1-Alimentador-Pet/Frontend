@@ -17,32 +17,27 @@ import SelectPicker from '../../../components/SelectPicker';
 import {ButtonPrimary, ButtonText} from '../../../components/Buttons';
 import DocumentPicker from 'react-native-document-picker';
 import {File} from 'phosphor-react-native';
-
+import {
+  weekChoices,
+  quantityChoices,
+  timeChoices,
+} from '../../../utils/selector';
 import {updateFeeder} from '../../../services/feeder';
 
 const Settings = ({navigation, route}) => {
-  const {user, token, feeders, storeFeeders} = useUser();
+  const {token, feeders, storeFeeders, configs, storeConfigs} = useUser();
   const feeder = route.params?.data;
+  const config = configs[feeder.token] || {};
+
+  console.log(configs);
 
   const [nome, setNome] = useState(feeder.nomeAlimentador);
   const [openQuantity, setOpenQuantity] = useState(false);
-  const [quantity, setQuantity] = useState(feeder.quantidadePadrao);
-  const [quantityItems, setQuantityItems] = useState([
-    {label: '100g', value: '100'},
-    {label: '130g', value: '130'},
-    {label: '150g', value: '150'},
-    {label: '180g', value: '180'},
-    {label: '200g', value: '200'},
-  ]);
+  const [quantity, setQuantity] = useState(config.quantidadePadrao);
+  const [quantityItems, setQuantityItems] = useState(quantityChoices);
   const [openTime, setOpenTime] = useState(false);
-  const [time, setTime] = useState(feeder.tempoBandeja);
-  const [timeItems, setTimeItems] = useState([
-    {label: '100g', value: '100'},
-    {label: '130g', value: '130'},
-    {label: '150g', value: '150'},
-    {label: '180g', value: '180'},
-    {label: '200g', value: '200'},
-  ]);
+  const [time, setTime] = useState(config.tempoBandeja);
+  const [timeItems, setTimeItems] = useState(timeChoices);
   const [fileResponse, setFileResponse] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -52,29 +47,29 @@ const Settings = ({navigation, route}) => {
     setIsLoading(true);
 
     const newFeeder = {
-      nome,
-      quantity,
-      time,
+      nomeAlimentador: nome,
     };
 
-    console.log(newFeeder);
+    const newConfig = {
+      quantidadePadrao: quantity,
+      tempoBandeja: time,
+    };
 
-    const response = await updateFeeder(newFeeder, feeder.token, 'token');
+    const response = await updateFeeder(newFeeder, feeder.token, token);
 
     setIsLoading(false);
 
-    console.log(response);
-
     if (response.status === 200) {
-      const feeder = response.data;
-      const newFeeders = feeders.filter(f => f.token !== token);
-
-      newFeeders.push({
-        ...feeder,
-        ...newFeeder,
-      });
+      const feederNew = response.data;
+      const newFeeders = feeders.filter(f => f.token !== feeder.token);
+      newFeeders.push(feederNew);
       storeFeeders(newFeeders);
-      Alert.alert('Seu perfil foi atualizado');
+
+      Object.assign(config, newConfig);
+      configs[feeder.token] = config;
+      storeConfigs(configs);
+
+      navigation.navigate('Feeder', {data: feederNew});
     } else if (response.status === 401) {
       Alert.alert('Seu token expirou, faça login novamente');
     } else {

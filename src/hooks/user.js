@@ -14,7 +14,9 @@ export const UserProvider = ({children}) => {
   const [token, setToken] = useState('');
   const [user, setUser] = useState({});
   const [feeders, setFeeders] = useState([]);
+  const [configs, setConfigs] = useState({});
   const [schedules, setSchedules] = useState([]);
+  const [history, setHistory] = useState([]);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -49,10 +51,18 @@ export const UserProvider = ({children}) => {
 
   const loadSecondaryData = useCallback(async () => {
     // Loads only secondary data stored
+    const storedConfigs = JSON.parse(await AsyncStorage.getItem('configs'));
     const storedSchedules = JSON.parse(await AsyncStorage.getItem('schedules'));
+    const storedHistory = JSON.parse(await AsyncStorage.getItem('history'));
 
+    if (storedConfigs) {
+      setConfigs(storedConfigs);
+    }
     if (storedSchedules) {
       setSchedules(storedSchedules);
+    }
+    if (storedHistory) {
+      setHistory(storedHistory);
     }
   }, []);
 
@@ -73,6 +83,9 @@ export const UserProvider = ({children}) => {
       await AsyncStorage.removeItem('user');
       await AsyncStorage.removeItem('token');
       await AsyncStorage.removeItem('feeders');
+      await AsyncStorage.removeItem('configs');
+      await AsyncStorage.removeItem('schedules');
+      await AsyncStorage.removeItem('history');
     } catch (e) {
       console.log(e);
     }
@@ -86,10 +99,24 @@ export const UserProvider = ({children}) => {
     }
   };
 
+  const storeConfigs = async configsObj => {
+    if (configsObj) {
+      setConfigs(configsObj);
+      await AsyncStorage.setItem('configs', JSON.stringify(configsObj));
+    }
+  };
+
   const storeSchedules = async schedulesArr => {
     if (schedulesArr) {
       setSchedules(schedulesArr);
       await AsyncStorage.setItem('schedules', JSON.stringify(schedulesArr));
+    }
+  };
+
+  const storeHistory = async historyArr => {
+    if (historyArr) {
+      setHistory(historyArr);
+      await AsyncStorage.setItem('history', JSON.stringify(historyArr));
     }
   };
 
@@ -104,8 +131,12 @@ export const UserProvider = ({children}) => {
         signOut,
         feeders,
         storeFeeders,
+        configs,
+        storeConfigs,
         schedules,
         storeSchedules,
+        history,
+        storeHistory,
       }}>
       {children}
     </UserContext.Provider>
