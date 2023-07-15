@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {StatusBar, Alert} from 'react-native';
+import {StatusBar} from 'react-native';
 import {
   SlidersHorizontal,
   ChartLineUp,
@@ -46,7 +46,6 @@ const Feeder = ({navigation, route}) => {
     const response = await sendFood(newFood, token);
 
     if (response.status === 200) {
-      Alert.alert('Seu pet será alimentado em breve');
       setIsBowlFull(true);
     }
   };

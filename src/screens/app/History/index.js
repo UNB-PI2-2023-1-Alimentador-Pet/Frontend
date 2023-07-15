@@ -43,6 +43,7 @@ const History = ({navigation}) => {
           {history.length > 0 ? (
             history.map(item => (
               <Item
+                key={item.id}
                 title={'Ração liberada'}
                 subtitle={`${item.data} ${formattedTime(item.horario)}`}
                 icon={

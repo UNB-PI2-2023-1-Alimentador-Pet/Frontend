@@ -1,4 +1,5 @@
 import React, {useCallback, useState, useEffect} from 'react';
+import {StatusBar} from 'react-native';
 import {LineChart} from 'react-native-gifted-charts';
 
 import {
@@ -91,6 +92,7 @@ const Report = () => {
 
   return (
     <ScreenContainer>
+      <StatusBar backgroundColor={colors.lightGray} barStyle="dark-content" />
       <Content>
         <ChartWrapper>
           <LineChart
