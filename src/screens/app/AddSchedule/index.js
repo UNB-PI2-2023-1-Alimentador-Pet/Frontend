@@ -25,7 +25,7 @@ const AddSchedule = ({navigation, route}) => {
   const feeder = route.params?.data;
   const isEditing = route.params?.isEditing;
 
-  console.log(route.params);
+  console.log(route.params?.data);
 
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState([]);

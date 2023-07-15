@@ -5,6 +5,7 @@ import {useFocusEffect} from '@react-navigation/native';
 
 import LoadingModal from '../../../components/LoadingModal';
 import {ScreenContainer} from './styles';
+import {ScrollArea} from '../../../components/Defaults';
 import {colors} from '../../../utils/colors';
 import Item from '../../../components/Item';
 import {Content} from '../Home/styles';
@@ -44,44 +45,43 @@ const Scheduler = ({navigation, route}) => {
 
   return (
     <ScreenContainer>
-      <StatusBar backgroundColor={colors.lightGray} barStyle="dark-content" />
-      <Content>
-        {schedules.length > 0 ? (
-          schedules.map(item => (
+      <ScrollArea>
+        <StatusBar backgroundColor={colors.lightGray} barStyle="dark-content" />
+        <Content>
+          {schedules.length > 0 ? (
+            schedules.map(item => (
+              <Item
+                key={item.horario}
+                title={formattedTime(item.horario)}
+                subtitle={`${item.quantidade}g - ${convertDaysOfWeek(
+                  item.recorrencia,
+                )}`}
+                icon={
+                  <Calendar
+                    color={colors.light}
+                    size={scale(28)}
+                    weight="duotone"
+                  />
+                }
+                onIconPress={() =>
+                  navigation.navigate('EditSchedule', {data: item})
+                }
+              />
+            ))
+          ) : (
             <Item
-              key={item.horario}
-              title={formattedTime(item.horario)}
-              subtitle={`${item.quantidade}g - ${convertDaysOfWeek(
-                item.recorrencia,
-              )}`}
+              title="Nenhum horário cadastrado"
               icon={
                 <Calendar
                   color={colors.light}
-                  size={scale(24)}
+                  size={scale(28)}
                   weight="duotone"
                 />
               }
-              onIconPress={() =>
-                navigation.navigate('EditSchedule', {data: item})
-              }
             />
-          ))
-        ) : (
-          <Item
-            title="Nenhum horário cadastrado"
-            icon={
-              <Calendar
-                color={colors.light}
-                size={scale(24)}
-                weight="duotone"
-              />
-            }
-            onIconPress={() =>
-              navigation.navigate('AddSchedule', {data: feeder})
-            }
-          />
-        )}
-      </Content>
+          )}
+        </Content>
+      </ScrollArea>
 
       <LoadingModal visible={isLoading} />
     </ScreenContainer>

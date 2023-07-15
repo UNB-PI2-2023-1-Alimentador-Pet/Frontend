@@ -32,20 +32,22 @@ const Feeder = ({navigation, route}) => {
   const [lastHistory] = history;
 
   const [nextSchedule, setNextSchedule] = useState('');
-  const [isBowlFull, setIsBowlFull] = useState(true);
+
+  const [isBowlFull, setIsBowlFull] = useState(false);
 
   const sendFeederFood = async () => {
     const newFood = {
       topic: `feeder/${feeder.token}`,
       action: 'feed',
-      quantidade: config.quantidade ? config.quantidade : 50,
-      tempoBandeja: config.tempoBandeja ? config.tempoBandeja : 1,
+      quantidade: config.quantidade ? parseInt(config.quantidade) : 50,
+      tempoBandeja: config.tempoBandeja ? parseInt(config.tempoBandeja) : 1,
     };
 
     const response = await sendFood(newFood, token);
 
     if (response.status === 200) {
       Alert.alert('Seu pet será alimentado em breve');
+      setIsBowlFull(true);
     }
   };
 
@@ -91,6 +93,20 @@ const Feeder = ({navigation, route}) => {
   }, [schedules]);
 
   useEffect(() => {
+    let timeout = null;
+
+    if (isBowlFull) {
+      timeout = setTimeout(() => {
+        setIsBowlFull(false);
+      }, 10 * 1000);
+    }
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [isBowlFull]);
+
+  useEffect(() => {
     getNextSchedule();
   }, [getNextSchedule]);
 
@@ -100,8 +116,7 @@ const Feeder = ({navigation, route}) => {
 
   return (
     <ScreenContainer>
-      <StatusBar backgroundColor={colors.primary} barStyle="dark-content" />
-
+      <StatusBar backgroundColor={colors.primary} barStyle="light-content" />
       <FeedContainer>
         <ActionsButton
           onPress={() => navigation.navigate('Settings', {data: feeder})}>
@@ -112,7 +127,7 @@ const Feeder = ({navigation, route}) => {
           />
         </ActionsButton>
 
-        <FeedButton onPress={() => sendFeederFood()}>
+        <FeedButton onPress={() => sendFeederFood()} disabled={isBowlFull}>
           <Feed>
             {isBowlFull ? (
               <BowlImage

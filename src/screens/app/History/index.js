@@ -1,8 +1,10 @@
 import React, {useEffect} from 'react';
+import {StatusBar} from 'react-native';
 import {Gauge, PawPrint} from 'phosphor-react-native';
 
 import {ScreenContainer} from './styles';
 import Item from '../../../components/Item';
+import {ScrollArea} from '../../../components/Defaults';
 import {Content} from '../Home/styles';
 import {colors} from '../../../utils/colors';
 import {scale} from '../../../utils/scalling';
@@ -21,7 +23,8 @@ const History = ({navigation}) => {
 
     if (response.status === 200) {
       if (!response.data?.message) {
-        storeHistory(response.data);
+        const slicedHistory = response.data.reverse().slice(0, 7);
+        storeHistory(slicedHistory);
       } else {
         storeHistory([]);
       }
@@ -34,34 +37,37 @@ const History = ({navigation}) => {
 
   return (
     <ScreenContainer>
-      <Content>
-        {history.length > 0 ? (
-          history.map(item => (
+      <ScrollArea>
+        <StatusBar backgroundColor={colors.lightGray} barStyle="dark-content" />
+        <Content>
+          {history.length > 0 ? (
+            history.map(item => (
+              <Item
+                title={'Ração liberada'}
+                subtitle={`${item.data} ${formattedTime(item.horario)}`}
+                icon={
+                  <PawPrint
+                    color={colors.light}
+                    size={scale(28)}
+                    weight="duotone"
+                  />
+                }
+              />
+            ))
+          ) : (
             <Item
-              title={'Ração liberada'}
-              subtitle={`${item.data} ${formattedTime(item.horario)}`}
+              title={'Nenhum histórico ainda'}
               icon={
                 <PawPrint
                   color={colors.light}
-                  size={scale(24)}
+                  size={scale(28)}
                   weight="duotone"
                 />
               }
             />
-          ))
-        ) : (
-          <Item
-            title={'Nenhum histórico ainda'}
-            icon={
-              <PawPrint
-                color={colors.light}
-                size={scale(24)}
-                weight="duotone"
-              />
-            }
-          />
-        )}
-      </Content>
+          )}
+        </Content>
+      </ScrollArea>
     </ScreenContainer>
   );
 };

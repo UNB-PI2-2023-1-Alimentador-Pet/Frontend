@@ -1,5 +1,5 @@
 import React, {useEffect, useCallback, useState} from 'react';
-import {PermissionsAndroid, TouchableOpacity} from 'react-native';
+import {StatusBar, PermissionsAndroid, TouchableOpacity} from 'react-native';
 import {CircleNotch, WifiHigh} from 'phosphor-react-native';
 import WifiManager from 'react-native-wifi-reborn';
 
@@ -85,6 +85,7 @@ const AddFeeder = ({navigation}) => {
   return (
     <ScreenContainer>
       <ScrollArea>
+        <StatusBar backgroundColor={colors.light} barStyle="dark-content" />
         {wifiEnabled ? (
           <TouchableOpacity onPress={() => getWifiList()}>
             <Tooltip>

@@ -17,11 +17,7 @@ import SelectPicker from '../../../components/SelectPicker';
 import {ButtonPrimary, ButtonText} from '../../../components/Buttons';
 import DocumentPicker from 'react-native-document-picker';
 import {File} from 'phosphor-react-native';
-import {
-  weekChoices,
-  quantityChoices,
-  timeChoices,
-} from '../../../utils/selector';
+import {quantityChoices, timeChoices} from '../../../utils/selector';
 import {updateFeeder} from '../../../services/feeder';
 
 const Settings = ({navigation, route}) => {

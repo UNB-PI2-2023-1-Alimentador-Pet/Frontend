@@ -40,6 +40,7 @@ export const FeedButton = styled.TouchableOpacity.attrs({
   margin-right: ${scale(12)}px;
   margin-left: ${scale(12)}px;
   padding: ${scale(4)}px;
+  opacity: ${props => (props.disabled ? 0.5 : 1)};
   ${shadow}
 `;
 

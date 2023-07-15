@@ -69,11 +69,13 @@ const AppStack = () => {
       <Stack.Screen
         name="Scheduler"
         component={Scheduler}
-        options={({navigation}) => ({
+        options={({navigation, route}) => ({
           title: 'Agenda',
           headerRight: () => (
             <TouchableOpacity
-              onPress={() => navigation.navigate('AddSchedule')}>
+              onPress={() =>
+                navigation.navigate('AddSchedule', {data: route.params?.data})
+              }>
               <PlusCircle
                 color={colors.primary}
                 weight="fill"
