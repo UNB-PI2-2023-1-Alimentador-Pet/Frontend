@@ -41,6 +41,12 @@ const Profile = () => {
       senha: senha || undefined,
     };
 
+    if (senha.length > 0 && senha.length < 8) {
+      setIsLoading(false);
+      Alert.alert('A senha deve ter no mínimo 8 caracteres');
+      return;
+    }
+
     const response = await updateUser(newUser, user.userHash, token);
 
     setIsLoading(false);

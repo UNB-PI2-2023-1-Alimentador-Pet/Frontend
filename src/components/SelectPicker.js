@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import DropDownPicker from 'react-native-dropdown-picker';
 

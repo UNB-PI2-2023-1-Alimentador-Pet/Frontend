@@ -1,5 +1,5 @@
 import React, {useEffect, useCallback, useState} from 'react';
-import {PermissionsAndroid, TouchableOpacity} from 'react-native';
+import {StatusBar, PermissionsAndroid, TouchableOpacity} from 'react-native';
 import {CircleNotch, WifiHigh} from 'phosphor-react-native';
 import WifiManager from 'react-native-wifi-reborn';
 
@@ -17,7 +17,7 @@ import Spinner from '../../../components/Spinner';
 import {colors} from '../../../utils/colors';
 import {scale} from '../../../utils/scalling';
 
-const AddDevice = ({navigation}) => {
+const AddFeeder = ({navigation}) => {
   const [wifiEnabled, setWifiEnabled] = useState(false);
   const [wifiList, setWifiList] = useState([]);
   const [currentWifiSSID, setCurrentWifiSSID] = useState('');
@@ -34,7 +34,7 @@ const AddDevice = ({navigation}) => {
     );
   };
 
-  const tryToConnectDevice = ssid => {
+  const tryToConnectFeeder = ssid => {
     WifiManager.connectToProtectedSSID(ssid, '12345678', false, false).then(
       () => {
         console.warn('Connected successfully!');
@@ -85,6 +85,7 @@ const AddDevice = ({navigation}) => {
   return (
     <ScreenContainer>
       <ScrollArea>
+        <StatusBar backgroundColor={colors.light} barStyle="dark-content" />
         {wifiEnabled ? (
           <TouchableOpacity onPress={() => getWifiList()}>
             <Tooltip>
@@ -129,7 +130,7 @@ const AddDevice = ({navigation}) => {
               key={wifi.BSSID}
               image={require('../../../assets/imgs/alimentador.png')}
               title={wifi.SSID}
-              onPress={() => tryToConnectDevice(wifi.SSID)}
+              onPress={() => tryToConnectFeeder(wifi.SSID)}
               gray
             />
           ))}
@@ -139,4 +140,4 @@ const AddDevice = ({navigation}) => {
   );
 };
 
-export default AddDevice;
+export default AddFeeder;

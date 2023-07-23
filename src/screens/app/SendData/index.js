@@ -1,6 +1,7 @@
 import React, {useRef, useState} from 'react';
 import {Alert, Keyboard} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import WifiManager from 'react-native-wifi-reborn';
 
 import LoadingModal from '../../../components/LoadingModal';
 import {
@@ -17,10 +18,15 @@ import {
 import {colors} from '../../../utils/colors';
 
 import {useUser} from '../../../hooks/user';
-import {sendWiFiData, getStatus, restart} from '../../../services/device';
+import {
+  sendWiFiData,
+  getStatus,
+  restart,
+  createFeeder,
+} from '../../../services/feeder';
 
 const SendData = ({navigation, route}) => {
-  const {user, devices, storeDevices} = useUser();
+  const {token, user, feeders, storeFeeders} = useUser();
   const {ssid} = route.params;
 
   const [nome, setNome] = useState(ssid);
@@ -30,23 +36,56 @@ const SendData = ({navigation, route}) => {
   const nomeInput = useRef();
   const senhaInput = useRef();
 
-  const restartDevice = async () => {
-    setIsLoading(true);
+  const createFeederOnAPI = async feederToken => {
+    const newFeeder = {
+      token: feederToken,
+      nomeAlimentador: 'Alimentador',
+      nomePet: 'pet',
+      especie: 'especie',
+      raca: 'raca',
+      userHash: user.userHash,
+      fotoPet: null,
+      audio: null,
+      audioHabilitado: false,
+    };
 
-    const response = await restart();
+    const response = await createFeeder(newFeeder, token);
 
     setIsLoading(false);
 
     if (response.status === 200) {
+      console.log('Feeder criado com sucesso');
       Alert.alert('Alimentador adicionado com sucesso');
-      const newDevice = {
-        id: 1,
-        nome: 'MiAuFeeder-0001',
-        status: 'connected',
-      };
-      storeDevices([...devices, newDevice]);
+      storeFeeders([...feeders, newFeeder]);
       navigation.navigate('Home');
     } else {
+      setIsLoading(false);
+    }
+  };
+
+  const tryToConnectWifiAgain = token1 => {
+    WifiManager.connectToProtectedSSID(ssid, senha, false, false).then(
+      () => {
+        console.warn('Connected successfully!');
+        createFeederOnAPI(token1);
+      },
+      e => {
+        console.warn('Connection failed!', e);
+        setIsLoading(false);
+      },
+    );
+  };
+
+  const restartFeeder = async () => {
+    //setIsLoading(false);
+
+    const response = await restart();
+    console.warn(response);
+
+    if (response.status === 200) {
+      tryToConnectWifiAgain(response.data.token);
+    } else {
+      setIsLoading(false);
       Alert.alert(
         'Erro ao reiniciar',
         'Tente reiniciar o dispositivo manualmente.',
@@ -54,8 +93,8 @@ const SendData = ({navigation, route}) => {
     }
   };
 
-  const getDeviceStatus = async () => {
-    setIsLoading(true);
+  const getFeederStatus = async () => {
+    //setIsLoading(false);
     let requests = 0;
 
     while (requests < 100) {
@@ -64,9 +103,9 @@ const SendData = ({navigation, route}) => {
       console.warn(response.data);
 
       if (response.status === 200) {
-        if (response.data.status === 'connecting') {
+        if (response.data.status === 'connected') {
           requests = 100;
-          restartDevice();
+          restartFeeder();
         } else if (response.data.status === 'fail') {
           setIsLoading(false);
           Alert.alert(
@@ -87,7 +126,7 @@ const SendData = ({navigation, route}) => {
     }
   };
 
-  const handleSend = async () => {
+  const handleSendWifi = async () => {
     Keyboard.dismiss();
     setIsLoading(true);
 
@@ -101,7 +140,7 @@ const SendData = ({navigation, route}) => {
     console.warn(response);
 
     if (response.status === 200) {
-      getDeviceStatus();
+      getFeederStatus();
     } else {
       setIsLoading(false);
       Alert.alert(
@@ -138,7 +177,7 @@ const SendData = ({navigation, route}) => {
 
           <ContentContainer>
             <ButtonWrapper>
-              <ButtonPrimary onPress={() => handleSend()}>
+              <ButtonPrimary onPress={() => handleSendWifi()}>
                 <ButtonText>Salvar</ButtonText>
               </ButtonPrimary>
             </ButtonWrapper>
