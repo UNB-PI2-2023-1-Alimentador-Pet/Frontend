@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect} from 'react';
 import {StatusBar} from 'react-native';
 import {Gauge, PawPrint} from 'phosphor-react-native';

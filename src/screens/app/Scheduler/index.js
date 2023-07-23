@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useCallback, useState} from 'react';
 import {StatusBar} from 'react-native';
 import {Calendar} from 'phosphor-react-native';

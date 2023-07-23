@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useCallback, useState, useEffect} from 'react';
 import {StatusBar} from 'react-native';
 import {LineChart} from 'react-native-gifted-charts';
@@ -23,7 +24,7 @@ const Report = () => {
   const [consumoMedio, setConsumoMedio] = useState(0);
   const [horarioMedio, setHorarioMedio] = useState('');
 
-  const getMediumTime = useCallback(() => {
+  const getHorarioMedio = useCallback(() => {
     const datas = [];
 
     history.forEach(item => {
@@ -44,7 +45,7 @@ const Report = () => {
     setHorarioMedio(`${hora}:${minutos}`);
   }, [history]);
 
-  const formattedData = useCallback(async () => {
+  const getConsumoMedio = useCallback(async () => {
     const data = [];
     let quantidadeConsumidaTotal = 0;
     let vezes = 0;
@@ -82,9 +83,9 @@ const Report = () => {
   };
 
   useEffect(() => {
-    formattedData();
-    getMediumTime();
-  }, [history, formattedData, getMediumTime]);
+    getConsumoMedio();
+    getHorarioMedio();
+  }, [history, getConsumoMedio, getHorarioMedio]);
 
   useEffect(() => {
     fetchHistory();
