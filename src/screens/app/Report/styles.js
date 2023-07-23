@@ -11,6 +11,7 @@ export const ScreenContainer = styled.View`
 export const ChartContainer = styled.View`
   width: 100%;
   flex-direction: row;
+  justify-content: space-between;
 `;
 
 export const ChartWrapper = styled.View`
@@ -19,4 +20,19 @@ export const ChartWrapper = styled.View`
   justify-content: center;
   padding: ${scale(18)}px;
   margin-bottom: ${scale(10)}px;
+`;
+
+export const ChartTitleText = styled.Text`
+  font-family: 'Inter-SemiBold';
+  font-size: ${scale(14)}px;
+  color: ${colors.secondary};
+  margin-bottom: ${scale(12)}px;
+  text-align: center;
+`;
+
+export const ChartValueText = styled.Text`
+  font-family: 'Inter-Regular';
+  font-size: ${scale(24)}px;
+  color: ${colors.darkGray};
+  text-align: center;
 `;

@@ -13,7 +13,10 @@ const UserContext = createContext(null);
 export const UserProvider = ({children}) => {
   const [token, setToken] = useState('');
   const [user, setUser] = useState({});
-  const [devices, setDevices] = useState([]);
+  const [feeders, setFeeders] = useState([]);
+  const [configs, setConfigs] = useState({});
+  const [schedules, setSchedules] = useState([]);
+  const [history, setHistory] = useState([]);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -26,7 +29,7 @@ export const UserProvider = ({children}) => {
     // Loads only essencial data stored
     const storedToken = await AsyncStorage.getItem('token');
     const storedUser = JSON.parse(await AsyncStorage.getItem('user'));
-    const storedDevices = JSON.parse(await AsyncStorage.getItem('devices'));
+    const storedFeeders = JSON.parse(await AsyncStorage.getItem('feeders'));
 
     if (storedToken) {
       setToken(storedToken);
@@ -36,22 +39,41 @@ export const UserProvider = ({children}) => {
     if (storedUser) {
       setUser(storedUser);
     }
-    if (storedDevices) {
-      setDevices(storedDevices);
+    if (storedFeeders) {
+      setFeeders(storedFeeders);
     }
 
     setIsLoading(false);
     SplashScreen.hide();
+
+    loadSecondaryData();
+  }, [loadSecondaryData]);
+
+  const loadSecondaryData = useCallback(async () => {
+    // Loads only secondary data stored
+    const storedConfigs = JSON.parse(await AsyncStorage.getItem('configs'));
+    const storedSchedules = JSON.parse(await AsyncStorage.getItem('schedules'));
+    const storedHistory = JSON.parse(await AsyncStorage.getItem('history'));
+
+    if (storedConfigs) {
+      setConfigs(storedConfigs);
+    }
+    if (storedSchedules) {
+      setSchedules(storedSchedules);
+    }
+    if (storedHistory) {
+      setHistory(storedHistory);
+    }
   }, []);
 
-  const storeUser = async (user, token = null) => {
-    if (user) {
-      setUser(user);
-      await AsyncStorage.setItem('user', JSON.stringify(user));
+  const storeUser = async (userObj, tokenStr = null) => {
+    if (userObj) {
+      setUser(userObj);
+      await AsyncStorage.setItem('user', JSON.stringify(userObj));
     }
-    if (token) {
-      setToken(token);
-      await AsyncStorage.setItem('token', token);
+    if (tokenStr) {
+      setToken(tokenStr);
+      await AsyncStorage.setItem('token', tokenStr);
     }
     setIsLoggedIn(true);
   };
@@ -60,17 +82,41 @@ export const UserProvider = ({children}) => {
     try {
       await AsyncStorage.removeItem('user');
       await AsyncStorage.removeItem('token');
-      await AsyncStorage.removeItem('devices');
+      await AsyncStorage.removeItem('feeders');
+      await AsyncStorage.removeItem('configs');
+      await AsyncStorage.removeItem('schedules');
+      await AsyncStorage.removeItem('history');
     } catch (e) {
       console.log(e);
     }
     setIsLoggedIn(false);
   };
 
-  const storeDevices = async devices => {
-    if (devices) {
-      setDevices(devices);
-      await AsyncStorage.setItem('devices', JSON.stringify(devices));
+  const storeFeeders = async feedersArr => {
+    if (feedersArr) {
+      setFeeders(feedersArr);
+      await AsyncStorage.setItem('feeders', JSON.stringify(feedersArr));
+    }
+  };
+
+  const storeConfigs = async configsObj => {
+    if (configsObj) {
+      setConfigs(configsObj);
+      await AsyncStorage.setItem('configs', JSON.stringify(configsObj));
+    }
+  };
+
+  const storeSchedules = async schedulesArr => {
+    if (schedulesArr) {
+      setSchedules(schedulesArr);
+      await AsyncStorage.setItem('schedules', JSON.stringify(schedulesArr));
+    }
+  };
+
+  const storeHistory = async historyArr => {
+    if (historyArr) {
+      setHistory(historyArr);
+      await AsyncStorage.setItem('history', JSON.stringify(historyArr));
     }
   };
 
@@ -83,8 +129,14 @@ export const UserProvider = ({children}) => {
         user,
         storeUser,
         signOut,
-        devices,
-        storeDevices,
+        feeders,
+        storeFeeders,
+        configs,
+        storeConfigs,
+        schedules,
+        storeSchedules,
+        history,
+        storeHistory,
       }}>
       {children}
     </UserContext.Provider>

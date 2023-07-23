@@ -39,12 +39,15 @@ const Register = () => {
       nome,
       email,
       senha,
-      // userHash: 'oI3Q2',
     };
 
     if (!nome || !email || !senha) {
       setIsLoading(false);
       Alert.alert('Preencha todos os campos');
+      return;
+    } else if (senha.length < 8) {
+      setIsLoading(false);
+      Alert.alert('A senha deve ter no mínimo 8 caracteres');
       return;
     }
 
